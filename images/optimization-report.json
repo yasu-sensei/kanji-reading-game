@@ -1,0 +1,405 @@
+{
+  "original_git_commit": "8db0e68",
+  "jpeg_quality": 75,
+  "max_dimension": 1024,
+  "before_bytes": 7699975,
+  "after_bytes": 5871342,
+  "images": [
+    {
+      "file": "001_ランゾロ.jpg",
+      "before_bytes": 189079,
+      "after_bytes": 146473,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "0db9fd0044a68002ef2bd910a7a2c048d14cbeaddc80216f756797e6af155d8d",
+      "sha256": "c2e0bc291b792d23febee91257d4a1f868cb5fdff5cfa028b9b141f7ec7ca7b1",
+      "text_corrected": true
+    },
+    {
+      "file": "002_ランデルコ.jpg",
+      "before_bytes": 210747,
+      "after_bytes": 161486,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "e809f8c93e2dc75321a268d798eb139270d33f2eae2710269c7815a077d15b3a",
+      "sha256": "bad121d87fcc9728c069fdec81959cc5fb9715b0d4928e59ca46a6451340f40f",
+      "text_corrected": true
+    },
+    {
+      "file": "003_トウリュウ.jpg",
+      "before_bytes": 216113,
+      "after_bytes": 167170,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "7e21470c21ca3dc4ea72a26e9c37a08d4b27d004683796a2ce1bc57564bd8229",
+      "sha256": "0d6174406cde23ca81363092dc17aa6ec3da8d991be6b46337320bbd8dfa843c",
+      "text_corrected": true
+    },
+    {
+      "file": "004_ジュエリ.jpg",
+      "before_bytes": 205797,
+      "after_bytes": 158322,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "d72f23fb9268353021b0b0b3a14a7cc683a2dd3934693e537cafddd87d38574b",
+      "sha256": "4568cd3d5e86f568fd963cf4b0375a1658c62421868b7cb4373b7cdb97d14812",
+      "text_corrected": false
+    },
+    {
+      "file": "005_ギアウル.jpg",
+      "before_bytes": 232273,
+      "after_bytes": 176608,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "2179acacd1a28a8077a9cc7aa8d17de8cbe870dd30f384364033c10249251d40",
+      "sha256": "63aa7072aeca3cbc4b2499a6a71d59e1176718cd266ca93a8eda560fbfd964aa",
+      "text_corrected": false
+    },
+    {
+      "file": "006_ギアルフ.jpg",
+      "before_bytes": 222037,
+      "after_bytes": 169374,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "065534f9e0f7d7c56a180c32e8e46953593fc0e54a0a71dbed04a348609e918a",
+      "sha256": "0441879d8079be7a34c1f193f9f2bb6555a815b449a084545e1b49a24fc267af",
+      "text_corrected": false
+    },
+    {
+      "file": "007_カサクラ.jpg",
+      "before_bytes": 199950,
+      "after_bytes": 152956,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "f9092bdb88784db5880eb4dd1217474b9b8b63fe0aa7273a13085f849ac592f3",
+      "sha256": "993f5f9df3f96e125d917b29eb22d7915b63b57559a502a3bc4e9185f1a7a120",
+      "text_corrected": true
+    },
+    {
+      "file": "008_シロカブト.jpg",
+      "before_bytes": 217090,
+      "after_bytes": 166769,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "03fbcf5aa8e5b795079022a8970eddc5d7e4f5cd12f2908afe78dee8c21c63e6",
+      "sha256": "f6ac331b9bf107ff891b5a5c7fc394326539406d48ba91d03e6dc011a630913c",
+      "text_corrected": false
+    },
+    {
+      "file": "009_グランカブト.jpg",
+      "before_bytes": 264924,
+      "after_bytes": 199149,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "4e68cebfc0386e562c2441e00c86b111c58a0ae2aebb77786b8a6b53e208152a",
+      "sha256": "c174929b2c4872c06b43b885bcc26cfefcbe682b99411fe10cba40fec0e7020a",
+      "text_corrected": false
+    },
+    {
+      "file": "010_モチウサ.jpg",
+      "before_bytes": 180025,
+      "after_bytes": 139937,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "8d54a7a11d90372c408a9435c55d20bbd2ee0194262f10a59533b559f6bd086f",
+      "sha256": "bbccbe24db778c32fe7421338c84963292623d004428e1304e5a042c55916ff8",
+      "text_corrected": false
+    },
+    {
+      "file": "011_トケフクロ.jpg",
+      "before_bytes": 250621,
+      "after_bytes": 190657,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "65e8ecda4299fb05ff87ff082e80155d93f6634792527fabfb09958983ca0c83",
+      "sha256": "e030ca9b12cf053efa123f0b2cb4e579a7ba48c09b2e05713b27b5b96ea6646d",
+      "text_corrected": false
+    },
+    {
+      "file": "012_クロノウル.jpg",
+      "before_bytes": 195503,
+      "after_bytes": 150396,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "52b56ed3814a9788f02a20e9027bd0d718397dce7ae1f51ed1de3ff3f4a600e7",
+      "sha256": "797a3579f20442643ba71509d993d6510e71d2663117670d5b454f9f2e073b5a",
+      "text_corrected": false
+    },
+    {
+      "file": "013_カギネコ.jpg",
+      "before_bytes": 164203,
+      "after_bytes": 130408,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "7df69ee37b7eff1013e81ddb3b89e0226c9d661a5886ab3730529fd46a59a050",
+      "sha256": "cc79b9bddf023c7a1ad7500c55741c495b7a6bea705f11a1799bd845219786ab",
+      "text_corrected": false
+    },
+    {
+      "file": "014_ニャントム.jpg",
+      "before_bytes": 195122,
+      "after_bytes": 151479,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "1a29026186fc4779ab451f6498b7213b54f214fe02564b449c0ba185db357270",
+      "sha256": "375cc783efae51002cc8ec3438886c526b43c9d2188f66027f1c0897b6594ff6",
+      "text_corrected": true
+    },
+    {
+      "file": "015_ユキカメ.jpg",
+      "before_bytes": 186427,
+      "after_bytes": 145491,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "cab2d33ef97b51c371cf4131bd3d1ff98d1f91ddf4fbb63d1bd99dd640f4fb08",
+      "sha256": "06b55fbe985e78737422a6ee1ba6893c6ac8b08acef4465b2a56b63825f63cdf",
+      "text_corrected": false
+    },
+    {
+      "file": "016_イチゴバチ.jpg",
+      "before_bytes": 204512,
+      "after_bytes": 158334,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "549634b63f61b692cbed09431a5c4884cac8afff98c9e9d2c24ae4a07fa1a571",
+      "sha256": "524d753c543a3468c51d9c78b32d8390fedb9909d4638f55e7e44d2f8b800d69",
+      "text_corrected": false
+    },
+    {
+      "file": "017_メンガ.jpg",
+      "before_bytes": 229860,
+      "after_bytes": 177258,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "9e3eac0ce763a4cc9b47ed323a30b7be443b9e55160ba3ff5b29f298be8ee240",
+      "sha256": "e610eb684a0ee869e8712eb36e8441d9ffc315b5dc98b0cbb48af141de5cab17",
+      "text_corrected": false
+    },
+    {
+      "file": "018_マジエイ.jpg",
+      "before_bytes": 241358,
+      "after_bytes": 184267,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "4e4b6d01d60da8b5cdac1771692bd72dfee280cda36905a8ba87703e0bc3e420",
+      "sha256": "38c2b64a3f41948243780fc91cb93c2a91b3b13de4883ff0b0146e729af35c43",
+      "text_corrected": false
+    },
+    {
+      "file": "019_キカンサイ.jpg",
+      "before_bytes": 254439,
+      "after_bytes": 192173,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "ba937c63db7a43c5779765dcb6f6e7c47713248e8154abefa41d6ef552044684",
+      "sha256": "dedb8dac465735e7246667a11f3257f0bae8fb26aadb217867da7e8b38132f44",
+      "text_corrected": false
+    },
+    {
+      "file": "020_ゴウキサイ.jpg",
+      "before_bytes": 287304,
+      "after_bytes": 215712,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "90e16a20c2f28e9c07efff61469361cedc8333ceb8fd5795934bbbe48c7a25cc",
+      "sha256": "c4ce13c06e0633614adf80def3b9997dfef0b42ea159529186f5fe80f31ebb89",
+      "text_corrected": false
+    },
+    {
+      "file": "021_ツボタコ.jpg",
+      "before_bytes": 284059,
+      "after_bytes": 210821,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "b76f7eb86d105cdd28d0247dc729927bdc627c70b320f38684e9ad3dde9ea426",
+      "sha256": "121748b79965aa80af7e41255692634a98dada3dc75e1185d0cc8d3e8a53b1ad",
+      "text_corrected": false
+    },
+    {
+      "file": "022_パレットン.jpg",
+      "before_bytes": 236823,
+      "after_bytes": 180755,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "19e687b8933720502cfba573ff9affc4f6bd5303b8ad6e323c4d6ff639f8bf69",
+      "sha256": "0c3e360a144678f8dfc73a3d0fc1e7f91c39862ff4fd2ab508316f5566e58ced",
+      "text_corrected": false
+    },
+    {
+      "file": "023_ラッパタツ.jpg",
+      "before_bytes": 247343,
+      "after_bytes": 186716,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "2c2fc64a1857aaee55c5911542f4fa01292e9836642e89fa329daaf4acce3a37",
+      "sha256": "4393f5eb1268f64ec63b08741f8726bf19a2bfb465d73e781a389624f9426d77",
+      "text_corrected": false
+    },
+    {
+      "file": "024_フラミランプ_軽量版.jpg",
+      "before_bytes": 239996,
+      "after_bytes": 183125,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "d466f421e7c5186cf525d1537d963fd9bc82ef62ceddd359faf12c54e628d78d",
+      "sha256": "4ffef449cafbfe93403dc06320c1ea360cb845d74d0b65ed5cee35942254f54b",
+      "text_corrected": false
+    },
+    {
+      "file": "025_マグサソリ.jpg",
+      "before_bytes": 240585,
+      "after_bytes": 184456,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "1b31c05c38bb1ad82b0ac8869edcb78404188f58f12512a3c5c04016e257047a",
+      "sha256": "ab8c5a24c9a199a0c7b78ac1f26f50adf3e463a075bea6ff119abde38bc563af",
+      "text_corrected": false
+    },
+    {
+      "file": "026_タネモグラ.jpg",
+      "before_bytes": 264652,
+      "after_bytes": 198757,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "d7056494806b9aedf82aecd389114b12fac4a2687a5bfcceff81bcd59025ea58",
+      "sha256": "1569af780bb6aa72ddb36c67ea6b6b173d9cd9180799c87a1f589f987f459658",
+      "text_corrected": false
+    },
+    {
+      "file": "027_ダイコンモグ.jpg",
+      "before_bytes": 271661,
+      "after_bytes": 204489,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "821763074c1f91d6bab26a57f17ff3c0d4368ea3a2513c982170c12966927608",
+      "sha256": "555c37fe9446a873ed0a63592c8542b489ff52520e46786f1e6f5f1cf01406dd",
+      "text_corrected": false
+    },
+    {
+      "file": "028_アワロトル.jpg",
+      "before_bytes": 258066,
+      "after_bytes": 194582,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "ac4e5da18ba7269b128cb77c446c1b3e86f7ef0ae655f303e3cef90bacf11dff",
+      "sha256": "b0aadeaf7be199e9b72bfef681a30b0dc7563332e6690ed0db630287addbe2e0",
+      "text_corrected": false
+    },
+    {
+      "file": "029_アシザル.jpg",
+      "before_bytes": 265316,
+      "after_bytes": 199224,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "9fcf4150eb46321e758414c06548e91bb0ff79f66809ecb3b5f38329c39e2f4a",
+      "sha256": "989784bbe004b0bb0530211d040f0f82d5f685b0da09fb65bf93dbc98dc411e3",
+      "text_corrected": false
+    },
+    {
+      "file": "030_チンムシャ.jpg",
+      "before_bytes": 272857,
+      "after_bytes": 205691,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "0482bb7caf181416ad2a401c2c508268c484a7a80d5fcc3626d093c2e0cf47ff",
+      "sha256": "bfbc0868aec9dafb02dfe222a66a8fe69a2c6d23e5171d81b927f1617cd38ef7",
+      "text_corrected": false
+    },
+    {
+      "file": "031_ゴリカブト.jpg",
+      "before_bytes": 288856,
+      "after_bytes": 215957,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "53f3036a89cb05ae8b5eb664b3fe3f312a864e03c1fbfbb825142035790fd136",
+      "sha256": "1a47d5f96543a55ab0ce268db50d2b5f4c601e6202c5c9beef1570afa35a66ca",
+      "text_corrected": false
+    },
+    {
+      "file": "SECRET01_テンセイリュウ.jpg",
+      "before_bytes": 238019,
+      "after_bytes": 183004,
+      "dimensions": [
+        1024,
+        936
+      ],
+      "original_sha256": "0b5f76890929131b28265cc521e5771907ac6b24a5ebf8b77bca5641040bbb87",
+      "sha256": "887a3edbda141c8b540549d51ef222bd5452e24968e7efcffaa12f46f70a7faa",
+      "text_corrected": false
+    },
+    {
+      "file": "SECRET02_ジクロノス.jpg",
+      "before_bytes": 244358,
+      "after_bytes": 189346,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "original_sha256": "73518ac353004a8226a9f9da20efb8419d0bbb0d922fc64d92383253d9330566",
+      "sha256": "565fc923de1870280a3fb3c3b1176e0502ad18332ae576f1951adf534275001f",
+      "text_corrected": false
+    }
+  ]
+}
