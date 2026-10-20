@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171d39">
+  <link rel="stylesheet" href="css/rewards.css">
+  <script src="js/cards.js" defer></script>
+  <script src="js/rewards.js" defer></script>
+  <title>ごほうびガチャ | かんじの ぼうけん</title>
+</head>
+<body data-page="gacha">
+  <a class="skip-link" href="#main">ほんぶんへ</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span aria-hidden="true">✦</span> かんじの ぼうけん</a>
+    <nav aria-label="メニュー">
+      <a href="index.html">かんじ</a>
+      <a href="gacha.html" aria-current="page">ガチャ</a>
+      <a href="collection.html" >ずかん</a>
+    </nav>
+  </header>
+  <main id="main">
+    <p class="trial-note"><span>おためし</span> がくしゅうの星・きろくとは べつの、おためし画面です。</p>
+    <p id="storage-message" class="notice" role="status" aria-live="polite"></p>
+    <div class="page-heading">
+      <div><p class="eyebrow">ちいさな がんばりを、たからものに。</p><h1>ごほうびガチャ</h1><p>どんな なかまに あえるかな？</p></div>
+      <p class="star-wallet"><span aria-hidden="true">★</span> おためしの星 <strong id="star-count">—</strong> こ</p>
+    </div>
+    <div class="gacha-layout">
+      <section class="summon-panel" aria-label="カードをひく">
+        <div class="portal" aria-hidden="true"><div class="portal-ring"></div><div class="mystery-card"><span>✦</span><small>KANJI FRIENDS</small></div><span class="orbit-star star-one">✧</span><span class="orbit-star star-two">✦</span></div>
+        <p class="portal-caption">33しゅるいの なかまが まっているよ</p>
+        <button id="draw-card" class="primary-button" type="button" disabled>★ 1こで ガチャをひく</button>
+        <p id="draw-message" class="draw-message" role="status" aria-live="polite">じゅんびちゅう…</p>
+        <button id="add-demo-stars" class="text-button" type="button" disabled>おためしの星を 3こ ふやす</button>
+      </section>
+      <section class="result-panel" aria-labelledby="result-heading">
+        <p class="eyebrow">あたらしい であい</p><h2 id="result-heading">きみの なかまを よぼう</h2>
+        <div id="draw-result" class="result-content"><div class="empty-result" aria-hidden="true">✧</div><p>ガチャをひくと、ここに<br>カードが あらわれるよ。</p></div>
+        <a href="collection.html" class="secondary-button">ずかんを みにいく <span aria-hidden="true">→</span></a>
+      </section>
+    </div>
+    <section class="tier-guide" aria-labelledby="tier-heading">
+      <div><p class="eyebrow">おなじ なかまでも、もっと かがやく。</p><h2 id="tier-heading">3つの カードを あつめよう</h2><p>もらったカードは、ずかんに のこるよ。</p></div>
+      <ol class="tier-steps"><li><span class="tier-dot normal">✦</span><b>1まいめ</b><span>ノーマル</span></li><li><span class="tier-dot gold">✦</span><b>2まいめ</b><span>ゴールド</span></li><li><span class="tier-dot rainbow">✦</span><b>3まいめ</b><span>レインボー</span></li></ol>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <p>おためしのカードは、このブラウザーに ほぞんするよ。<br>みんなで つかうと、同じずかんに なるよ。</p>
+    <details><summary>おとなの方へ</summary><p>この画面は表示・操作確認用です。学習による星の付与、児童別管理、本番の排出率は未連携です。</p><button id="reset-demo" class="text-button" type="button">おためしの記録をリセット</button></details>
+  </footer>
+  <noscript><p class="notice">JavaScriptを有効にすると、カードをあつめられます。</p></noscript>
+</body>
+</html>
