@@ -112,3 +112,6 @@ body[data-page="gacha"] .text-button { font-size: .95rem; min-height: 48px; }
   body[data-page="gacha"] .result-content h3 { font-size: 1.25rem; }
   body[data-page="gacha"] .result-meta { font-size: 1rem; }
 }
+
+.collection-actions { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
+.collection-actions .secondary-button { min-height: 52px; }
