@@ -1,12 +1,18 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+const sandbox={window:{}};
+vm.runInNewContext(fs.readFileSync('js/questions.js','utf8'),sandbox);
+const csvOrder=[...new Set(sandbox.window.KanjiQuestions.parseQuestions(fs.readFileSync('data/kanji_400_final.csv','utf8')).map(q=>q.target))];
 (async()=>{
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox']});
  const context=await browser.newContext(); const page=await context.newPage();
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto('http://127.0.0.1:8000/');
+ await page.goto('http://127.0.0.1:8000/preparation.html');
  const buttons=page.locator('.kanji'); assert.equal(await buttons.count(),80);
  const chars=await buttons.allTextContents(); assert.equal(new Set(chars).size,80);
+ assert.deepEqual(chars,Array.from(csvOrder));
  const expected=Array.from('一二三四五六七八九十百千上下左右中大小月日年早木林山川土空田天生花草虫犬人名女男子目耳口手足見音力気円入出立休先夕本正文字学校村町森水火玉王石竹糸貝車金雨赤青白');
  assert.deepEqual([...chars].sort(),expected.sort());
  const one=page.getByRole('button',{name:'一',exact:true});
@@ -28,7 +34,7 @@ const assert=require('node:assert/strict');
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  const blocked=await browser.newContext();
  await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new DOMException('Denied','SecurityError')}})});
- const p=await blocked.newPage();await p.goto('http://127.0.0.1:8000/');
+ const p=await blocked.newPage();await p.goto('http://127.0.0.1:8000/preparation.html');
  await p.getByRole('button',{name:'一',exact:true}).click();
  assert.equal(await p.locator('[aria-pressed="true"]').count(),1);
  assert.match(await p.locator('#save-status').textContent(),/ほぞんできなかった/);

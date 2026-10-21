@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>よみかた 10もん | かんじの ぼうけん</title>
+  <link rel="stylesheet" href="css/quiz.css">
+  <script src="js/questions.js" defer></script>
+  <script src="js/quiz.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">もんだいへ</a>
+  <header class="quiz-header"><a href="index.html">← かんじを えらぶ</a><span>かんじの ぼうけん</span><span class="demo-label">おためし</span></header>
+  <main id="main">
+    <p class="demo-note">おためしの10もんです。がくしゅうの星・きろくには はんえいされません。</p>
+    <section id="loading-panel" class="message-panel" aria-labelledby="loading-heading"><h1 id="loading-heading">もんだいを よみこんでいるよ…</h1><p id="load-message" role="status" aria-live="polite"></p><button id="retry-load" class="action-button" type="button" hidden>もういちど よみこむ</button><a class="back-link" href="index.html">かんじを えらびなおす</a></section>
+    <section id="question-panel" aria-labelledby="question-heading" hidden>
+      <div class="question-top"><p id="question-number" class="question-number"></p><p id="selected-kanji" class="selected-kanji"></p></div>
+      <progress id="quiz-progress" max="10" value="0" aria-label="こたえた もんだい"></progress>
+      <div class="question-box"><p id="question-heading" class="instruction" tabindex="-1">なんて よむかな？</p><h1 id="question-word"></h1><p class="choice-hint">ただしい よみかたを ひとつ えらんでね。</p><p id="answer-feedback" class="answer-feedback" role="status" aria-live="polite" aria-atomic="true"></p></div>
+      <div id="answer-choices" class="answer-choices" role="group" aria-labelledby="question-heading question-word"></div>
+      <div class="answer-footer"><button id="next-question" class="action-button" type="button" hidden>つぎの もんだい →</button></div>
+    </section>
+    <section id="result-panel" class="result-panel" aria-labelledby="result-heading" hidden>
+      <span class="finish-mark" aria-hidden="true">✦</span><h1 id="result-heading" tabindex="-1">10もん おつかれさま！</h1><p id="result-score" class="result-score"></p><p>さいしょに えらんだ こたえで かぞえたよ。</p>
+      <div id="answer-summary" class="answer-summary"></div>
+      <div class="result-actions"><button id="play-again" class="action-button" type="button">おなじ かんじで もう10もん</button><a class="back-link" href="index.html">かんじを えらびなおす</a></div>
+      <p class="demo-note">ふくしゅう・しゅくだい・れんしゅう・星との れんけいは じゅんびちゅうです。ページを とじると、このけっかは きえます。</p>
+    </section>
+  </main>
+  <noscript><p class="message-panel">JavaScriptを有効にしてください。</p></noscript>
+</body>
+</html>

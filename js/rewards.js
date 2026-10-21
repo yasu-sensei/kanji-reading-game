@@ -7,7 +7,12 @@
     { id: "gold", name: "ゴールド", required: 2 },
     { id: "rainbow", name: "レインボー", required: 3 },
   ];
-  const storageKey = "kanji-reading-game:rewards-demo:v1";
+  const integrated = !new URLSearchParams(location.search).has("demo");
+  const storageKey = integrated ? window.GameStore.key : "kanji-reading-game:rewards-demo:v1";
+  let profileId = "";
+  if (integrated) {
+    try { profileId = window.GameStore.read().active; } catch { /* Handled by refreshState below. */ }
+  }
   const storageMessage = document.getElementById("storage-message");
   const page = document.body.dataset.page;
   let state;
@@ -17,10 +22,14 @@
   let lastFocus;
 
   function initialState() {
-    return { version: 1, stars: 3, counts: {} };
+    return { version: 1, stars: integrated ? 0 : 3, counts: {} };
   }
 
   function readState() {
+    if (integrated) {
+      const u = window.GameStore.profile(window.GameStore.read(), profileId);
+      return { version: 1, stars: u.stars, counts: { ...u.cardCounts } };
+    }
     const raw = localStorage.getItem(storageKey);
     if (raw === null) return initialState();
     const value = JSON.parse(raw);
@@ -41,13 +50,20 @@
     } catch {
       storageOK = false;
       state = initialState();
-      storageMessage.textContent = "おためしの記録を よみこめません。ガチャは おやすみ中です。おとなの方に しらせてね。";
+      storageMessage.textContent = integrated ? "とうろくや きろくを よみこめません。かんじの がめんで くみ・ばんごうを たしかめてね。" : "おためしの記録を よみこめません。ガチャは おやすみ中です。おとなの方に しらせてね。";
     }
   }
 
-  function saveState(next) {
+  async function saveState(next) {
     try {
-      localStorage.setItem(storageKey, JSON.stringify(next));
+      if (integrated) {
+        await window.GameStore.transact(data => {
+          const u = window.GameStore.profile(data, profileId);
+          if (u.stars !== state.stars || JSON.stringify(u.cardCounts) !== JSON.stringify(state.counts)) throw new Error("記録が更新されました");
+          u.stars = next.stars;
+          u.cardCounts = { ...next.counts };
+        });
+      } else localStorage.setItem(storageKey, JSON.stringify(next));
       state = next;
       storageMessage.textContent = "";
       return true;
@@ -103,10 +119,11 @@
     draw.textContent = complete ? "✦ ぜんぶ あつめたよ！" : "★ 1こで ハンドルをまわす";
     document.getElementById("machine-handle").disabled = draw.disabled;
     const add = document.getElementById("add-demo-stars");
-    add.disabled = !storageOK || busy || complete || state.stars > 996;
+    add.hidden = integrated;
+    add.disabled = integrated || !storageOK || busy || complete || state.stars > 996;
     const message = document.getElementById("draw-message");
     if (complete) message.textContent = "コンプリート！ 99まいの たからものが そろったよ。";
-    else if (state.stars === 0) message.textContent = "おためしの星を ふやすと、また ひけるよ。";
+    else if (state.stars === 0) message.textContent = integrated ? "しゅくだいや れんしゅうで 星を あつめよう！" : "おためしの星を ふやすと、また ひけるよ。";
     else if (!busy) message.textContent = "星1こで 1かい。3まい あつめた なかまは もうでないよ。";
   }
 
@@ -124,7 +141,7 @@
     document.getElementById("draw-message").textContent = `${card.name}の ${tier.name}カードを ずかんに ほぞんしたよ！`;
   }
 
-  function drawCard() {
+  async function drawCard() {
     if (busy) return;
     refreshState();
     const eligible = cards.filter((card) => countFor(card) < 3);
@@ -138,12 +155,13 @@
     const card = eligible[Math.floor((random[0] / 4294967296) * eligible.length)];
     const count = countFor(card) + 1;
     const next = { ...state, stars: state.stars - 1, counts: { ...state.counts, [card.id]: count } };
-    if (!saveState(next)) {
+    busy = true;
+    renderGacha();
+    if (!await saveState(next)) {
+      busy = false;
       renderGacha();
       return;
     }
-    busy = true;
-    renderGacha();
     const panel = document.querySelector(".summon-panel");
     panel.classList.add("is-drawing");
     panel.dataset.stage = "turn";
@@ -250,15 +268,19 @@
     else renderAlbum();
   }
 
+  const note = document.getElementById("profile-note");
+  if (note) note.textContent = integrated ? (profileId ? `${profileId.replace("-", "くみ ")}ばんの 星とカード · この端末に保存` : "はじめに、かんじの がめんで くみ・ばんごうを とうろくしてね。") : "おためし · がくしゅうの星とは べつの記録です。";
+  for (const element of document.querySelectorAll("[data-demo-only]")) element.hidden = integrated;
+  if (!integrated) for (const link of document.querySelectorAll('a[href="gacha.html"], a[href="collection.html"]')) link.href += "?demo=1";
   refreshState();
   render();
   if (page === "gacha") {
     document.getElementById("draw-card").addEventListener("click", drawCard);
     document.getElementById("machine-handle").addEventListener("click", drawCard);
-    document.getElementById("add-demo-stars").addEventListener("click", () => {
-      if (busy) return;
+    document.getElementById("add-demo-stars").addEventListener("click", async () => {
+      if (integrated || busy) return;
       refreshState();
-      if (storageOK && state.stars <= 996 && unlockedCount() < 99) saveState({ ...state, stars: state.stars + 3 });
+      if (storageOK && state.stars <= 996 && unlockedCount() < 99) await saveState({ ...state, stars: state.stars + 3 });
       renderGacha();
     });
   } else {
@@ -276,7 +298,7 @@
     dialog.addEventListener("close", () => lastFocus?.isConnected && lastFocus.focus());
   }
   document.getElementById("reset-demo").addEventListener("click", () => {
-    if (busy || !confirm("おためしの星とカードを すべてリセットしますか？ 学習の記録は変更しません。")) return;
+    if (integrated || busy || !confirm("おためしの星とカードを すべてリセットしますか？ 学習の記録は変更しません。")) return;
     try {
       localStorage.removeItem(storageKey);
       refreshState();
