@@ -60,3 +60,55 @@ main { max-width: 1184px; margin: auto; padding: 24px 32px 40px; }
 @keyframes foil-sparkle { from { opacity: .25; transform: scale(.65) rotate(-12deg); } to { opacity: 1; transform: scale(1.15) rotate(12deg); } }
 @media (max-width: 380px) { .gacha-machine { transform: scale(.9); margin-top: -10px; margin-bottom: 0; } }
 @media (prefers-reduced-motion: reduce) { .gacha-machine *, .card-art, .card-art::before, .card-art::after { animation: none !important; transition: none !important; }.card-art.gold::after,.card-art.rainbow::after { background-size: 100% 100%; opacity: .35; }.foil-sparkles i { animation: none; opacity: .7; transform: none; } }
+
+/* Keep the machine and draw controls close together without shrinking tap targets. */
+body[data-page="gacha"] main { max-width: 1040px; padding-top: 14px; }
+body[data-page="gacha"] .page-heading { margin: 12px 0 18px; }
+body[data-page="gacha"] h1 { font-size: clamp(1.6rem,4vw,2.1rem); }
+body[data-page="gacha"] .summon-panel, body[data-page="gacha"] .result-panel { padding: 20px; }
+body[data-page="gacha"] .gacha-machine { transform: scale(.82); transform-origin: top center; margin: 0 auto -54px; }
+body[data-page="gacha"] .machine-caption { margin: 4px 0 10px; font-size: .75rem; }
+body[data-page="gacha"] .result-content { margin-bottom: 12px; }
+body[data-page="gacha"] .result-content .card-art { max-width: 225px; }
+body[data-page="gacha"] .empty-result { margin: 8px 0 0; font-size: 3rem; }
+body[data-page="gacha"] .tier-guide { margin-top: 18px; padding: 18px 22px; gap: 14px; }
+body[data-page="gacha"] .tier-guide h2 { font-size: 1.1rem; margin-bottom: 5px; }
+body[data-page="gacha"] .tier-dot { width: 34px; height: 34px; font-size: 1.2rem; }
+@media (max-width: 600px) {
+  body[data-page="gacha"] .site-header { padding: 10px 16px; gap: 2px; }
+  body[data-page="gacha"] main { padding-top: 10px; }
+  body[data-page="gacha"] .page-heading { gap: 6px; margin: 10px 0 12px; }
+  body[data-page="gacha"] .page-heading .eyebrow { display: none; }
+  body[data-page="gacha"] .page-heading p:not(.star-wallet) { font-size: .8rem; }
+  body[data-page="gacha"] .star-wallet { padding: 3px 12px; font-size: .75rem; }
+  body[data-page="gacha"] .star-wallet strong { font-size: 1.3rem; }
+  body[data-page="gacha"] .summon-panel { padding: 14px 16px 8px; }
+  body[data-page="gacha"] .gacha-machine { transform: scale(.7); margin: 0 auto -96px; }
+  body[data-page="gacha"] .machine-caption { margin: 0 0 7px; }
+  body[data-page="gacha"] .primary-button { padding: 10px 12px; }
+  body[data-page="gacha"] .draw-message { font-size: .75rem; margin-top: 6px; }
+  body[data-page="gacha"] .result-panel { padding: 16px; }
+  body[data-page="gacha"] .result-content .card-art { max-width: 210px; }
+  body[data-page="gacha"] .tier-guide { padding: 16px; }
+}
+
+/* Primary target: touch-operated Chromebook/tablet, including 1024×768 landscape. */
+body[data-page="gacha"] .machine-caption,
+body[data-page="gacha"] .draw-message { font-size: 1rem; }
+body[data-page="gacha"] .primary-button,
+body[data-page="gacha"] .secondary-button { font-size: 1.05rem; min-height: 52px; }
+body[data-page="gacha"] .text-button { font-size: .95rem; min-height: 48px; }
+@media (min-width: 601px) {
+  body[data-page="gacha"] .site-header { padding-top: 14px; padding-bottom: 14px; }
+  body[data-page="gacha"] .site-header nav a { min-height: 48px; display: inline-flex; align-items: center; }
+  body[data-page="gacha"] .gacha-machine { transform: scale(.9); margin-bottom: -28px; }
+  body[data-page="gacha"] .page-heading { margin: 8px 0 12px; }
+  body[data-page="gacha"] .page-heading .eyebrow { display: none; }
+  body[data-page="gacha"] .page-heading h1 { font-size: 2rem; }
+  body[data-page="gacha"] .page-heading p:not(.star-wallet) { font-size: 1rem; }
+  body[data-page="gacha"] .star-wallet { margin: 0; padding: 6px 14px; }
+  body[data-page="gacha"] .summon-panel { padding: 12px 16px 8px; }
+  body[data-page="gacha"] .result-content .card-art { max-width: 260px; }
+  body[data-page="gacha"] .result-content h3 { font-size: 1.25rem; }
+  body[data-page="gacha"] .result-meta { font-size: 1rem; }
+}
