@@ -7,6 +7,7 @@
   const list = document.getElementById("kanji-list");
   const count = document.getElementById("selection-count");
   const status = document.getElementById("save-status");
+  const start = document.getElementById("start-quiz");
   let selected = new Set();
   let initialMessage = "えらぶと じどうで ほぞんするよ。";
 
@@ -24,6 +25,8 @@
 
   function updateCount() {
     count.textContent = `${selected.size} / 80 じ えらんだよ`;
+    start.disabled = selected.size === 0;
+    document.getElementById("start-hint").textContent = selected.size === 0 ? "かんじを 1じ いじょう えらんでね。" : "えらんだ かんじから 10もん だすよ。";
   }
 
   for (const character of kanji) {
@@ -47,6 +50,11 @@
     });
     list.append(button);
   }
+  start.addEventListener("click", () => {
+    if (selected.size === 0) return;
+    const params = new URLSearchParams({ kanji: kanji.filter((character) => selected.has(character)).join("") });
+    location.href = `quiz.html?${params}`;
+  });
   updateCount();
   status.textContent = initialMessage;
 })();
