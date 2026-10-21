@@ -28,9 +28,19 @@
     </div>
     <div class="gacha-layout">
       <section class="summon-panel" aria-label="カードをひく">
-        <div class="portal" aria-hidden="true"><div class="portal-ring"></div><div class="mystery-card"><span>✦</span><small>KANJI FRIENDS</small></div><span class="orbit-star star-one">✧</span><span class="orbit-star star-two">✦</span></div>
-        <p class="portal-caption">33しゅるいの なかまが まっているよ</p>
-        <button id="draw-card" class="primary-button" type="button" disabled>★ 1こで ガチャをひく</button>
+        <div class="gacha-machine">
+          <div class="machine-sign" aria-hidden="true">★ なかまガチャ ★</div>
+          <div class="machine-globe" aria-hidden="true"><span class="globe-shine"></span><span class="mini-capsule c1"></span><span class="mini-capsule c2"></span><span class="mini-capsule c3"></span><span class="mini-capsule c4"></span><span class="mini-capsule c5"></span><span class="mini-capsule c6"></span></div>
+          <div class="machine-base">
+            <span class="coin-slot" aria-hidden="true">★ 1こ</span>
+            <button id="machine-handle" class="machine-handle" type="button" aria-label="ハンドルをまわして ガチャをひく（星1こ）" disabled><span class="handle-bar" aria-hidden="true"></span></button>
+            <span class="handle-hint" aria-hidden="true">まわしてね ↻</span>
+            <div class="capsule-outlet" aria-hidden="true"><div class="prize-capsule"><span class="capsule-top"></span><span class="capsule-light">✦</span><span class="capsule-bottom"></span></div></div>
+          </div>
+          <div class="machine-feet" aria-hidden="true"></div>
+        </div>
+        <p class="machine-caption">33しゅるいの なかまが まっているよ</p>
+        <button id="draw-card" class="primary-button" type="button" disabled>★ 1こで ハンドルをまわす</button>
         <p id="draw-message" class="draw-message" role="status" aria-live="polite">じゅんびちゅう…</p>
         <button id="add-demo-stars" class="text-button" type="button" disabled>おためしの星を 3こ ふやす</button>
       </section>

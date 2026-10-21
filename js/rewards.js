@@ -81,6 +81,17 @@
       frame.append(message);
     }, { once: true });
     frame.append(image);
+    if (tier.id !== "normal") {
+      const sparkles = document.createElement("span");
+      sparkles.className = "foil-sparkles";
+      sparkles.setAttribute("aria-hidden", "true");
+      for (let index = 0; index < 8; index += 1) {
+        const star = document.createElement("i");
+        star.textContent = "✦";
+        sparkles.append(star);
+      }
+      frame.append(sparkles);
+    }
     return frame;
   }
 
@@ -89,7 +100,8 @@
     document.getElementById("star-count").textContent = state.stars;
     const draw = document.getElementById("draw-card");
     draw.disabled = !storageOK || busy || complete || state.stars === 0;
-    draw.textContent = complete ? "✦ ぜんぶ あつめたよ！" : "★ 1こで ガチャをひく";
+    draw.textContent = complete ? "✦ ぜんぶ あつめたよ！" : "★ 1こで ハンドルをまわす";
+    document.getElementById("machine-handle").disabled = draw.disabled;
     const add = document.getElementById("add-demo-stars");
     add.disabled = !storageOK || busy || complete || state.stars > 996;
     const message = document.getElementById("draw-message");
@@ -132,13 +144,38 @@
     }
     busy = true;
     renderGacha();
-    document.querySelector(".summon-panel").classList.add("is-drawing");
-    showResult(card, count);
-    setTimeout(() => {
+    const panel = document.querySelector(".summon-panel");
+    panel.classList.add("is-drawing");
+    panel.dataset.stage = "turn";
+    const result = document.getElementById("draw-result");
+    result.classList.remove("is-revealing");
+    result.textContent = "カプセルの なかは なにかな…？";
+    document.getElementById("result-heading").textContent = "ガチャガチャ…！";
+    document.getElementById("draw-message").textContent = "ハンドルを ぐるっと まわしているよ！";
+    const reveal = () => {
+      if (!panel.isConnected) return;
+      showResult(card, count);
+      result.classList.add("is-revealing");
+      panel.dataset.stage = "revealed";
+      panel.classList.remove("is-drawing");
       busy = false;
-      document.querySelector(".summon-panel").classList.remove("is-drawing");
       renderGacha();
-    }, 700);
+    };
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setTimeout(reveal, 80);
+      return;
+    }
+    setTimeout(() => {
+      if (!panel.isConnected) return;
+      panel.dataset.stage = "drop";
+      document.getElementById("draw-message").textContent = "ころん！ カプセルが でてきたよ。";
+    }, 850);
+    setTimeout(() => {
+      if (!panel.isConnected) return;
+      panel.dataset.stage = "open";
+      document.getElementById("draw-message").textContent = "ぱかっ！ カプセルが ひらくよ。";
+    }, 1550);
+    setTimeout(reveal, 2300);
   }
 
   function openDetail(card, tier, button) {
@@ -217,6 +254,7 @@
   render();
   if (page === "gacha") {
     document.getElementById("draw-card").addEventListener("click", drawCard);
+    document.getElementById("machine-handle").addEventListener("click", drawCard);
     document.getElementById("add-demo-stars").addEventListener("click", () => {
       if (busy) return;
       refreshState();
