@@ -84,7 +84,7 @@
     button.classList.add(correct ? "correct" : "incorrect");
     const feedback = document.getElementById("answer-feedback");
     feedback.className = `answer-feedback ${correct ? "correct" : "incorrect"}`;
-    feedback.textContent = correct ? "○ せいかい！" : `△ よみかたを たしかめよう：${question.correct}`;
+    feedback.textContent = correct ? "○ せいかい！" : `× たしかめよう：${question.correct}`;
     document.getElementById("quiz-progress").value = answers.length;
     const next = document.getElementById("next-question");
     next.textContent = answers.length === 10 ? "けっかを みる →" : "つぎの もんだい →";
@@ -101,7 +101,7 @@
       const item = document.createElement("li");
       const mark = document.createElement("span");
       mark.className = answer.correct ? "correct" : "incorrect";
-      mark.textContent = answer.correct ? "○" : "△";
+      mark.textContent = answer.correct ? "○" : "×";
       const text = document.createElement("span");
       text.textContent = `${answer.question.word}：${answer.question.correct}`;
       item.append(mark, text);

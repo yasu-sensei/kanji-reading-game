@@ -17,9 +17,9 @@
     <section id="question-panel" aria-labelledby="question-heading" hidden>
       <div class="question-top"><p id="question-number" class="question-number"></p><p id="selected-kanji" class="selected-kanji"></p></div>
       <progress id="quiz-progress" max="10" value="0" aria-label="こたえた もんだい"></progress>
-      <div class="question-box"><p id="question-heading" class="instruction" tabindex="-1">なんて よむかな？</p><h1 id="question-word"></h1><p class="choice-hint">ただしい よみかたを ひとつ えらんでね。</p></div>
+      <div class="question-box"><p id="question-heading" class="instruction" tabindex="-1">なんて よむかな？</p><h1 id="question-word"></h1><p class="choice-hint">ただしい よみかたを ひとつ えらんでね。</p><p id="answer-feedback" class="answer-feedback" role="status" aria-live="polite" aria-atomic="true"></p></div>
       <div id="answer-choices" class="answer-choices" role="group" aria-labelledby="question-heading question-word"></div>
-      <div class="answer-footer"><p id="answer-feedback" class="answer-feedback" role="status" aria-live="polite"></p><button id="next-question" class="action-button" type="button" hidden>つぎの もんだい →</button></div>
+      <div class="answer-footer"><button id="next-question" class="action-button" type="button" hidden>つぎの もんだい →</button></div>
     </section>
     <section id="result-panel" class="result-panel" aria-labelledby="result-heading" hidden>
       <span class="finish-mark" aria-hidden="true">✦</span><h1 id="result-heading" tabindex="-1">10もん おつかれさま！</h1><p id="result-score" class="result-score"></p><p>さいしょに えらんだ こたえで かぞえたよ。</p>

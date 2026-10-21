@@ -47,7 +47,12 @@ const base='http://127.0.0.1:8000';
    const target=choices.filter({hasText:expected});
    // Exact labels avoid substrings such as こかげ / もくかげ.
    const button=page.getByRole('button',{name:expected,exact:true});
-   await button.focus();await page.keyboard.press('Enter');
+   await button.focus();
+   // Verdict must be committed synchronously in the same click, before Next.
+   const immediate=await button.evaluate(el=>{el.click();return {text:document.getElementById('answer-feedback').textContent, next:!document.getElementById('next-question').hidden};});
+   assert(immediate.next);
+   assert.match(immediate.text,index%2===0?/○ せいかい/:/× たしかめよう/);
+   if(index===0)assert(await page.locator('#answer-feedback').evaluate(el=>el.closest('.question-box')!==null));
    await button.evaluate(el=>{el.click();el.click()});
    assert.equal(await page.locator('.answer-choice:disabled').count(),3);
    assert.match(await page.locator('#answer-feedback').textContent(),index%2===0?/せいかい/:new RegExp(q.correct));

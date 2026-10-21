@@ -8,3 +8,10 @@ main { max-width: 1040px; margin: auto; padding: 12px 28px 32px; }.demo-note { f
 @media(max-width:800px) { .answer-choices { gap: 12px; }.answer-choice { font-size: 22px; padding: 42px 10px 14px; min-height: 112px; }.choice-number { top: 8px; left: 10px; }main { padding: 12px 20px 28px; }.quiz-header { padding: 10px 20px; } }
 @media(max-width:600px) { .quiz-header { padding: 6px 16px; }.quiz-header > span:not(.demo-label) { display: none; }main { padding: 10px 14px 24px; }.demo-note { font-size: 13px; }.question-box { padding: 14px; margin-bottom: 14px; }.question-number { font-size: 18px; }.selected-kanji { font-size: 14px; }.answer-choices { grid-template-columns: 1fr; gap: 10px; }.answer-choice { min-height: 70px; padding: 12px 18px 12px 50px; }.choice-number { top: 20px; }.answer-footer { flex-direction: column; align-items: stretch; gap: 12px; min-height: 0; }.answer-feedback { font-size: 20px; }.answer-summary ol { columns: 1; }.message-panel,.result-panel { padding: 22px 16px; } }
 @media(prefers-reduced-motion:reduce) { * { scroll-behavior: auto !important; } }
+
+/* Immediate verdict stays beside the problem, above the choices. */
+.question-box .answer-feedback { min-height: 58px; margin: 10px 0 0; padding: 8px 12px; border: 2px solid transparent; border-radius: 12px; font-size: 28px; line-height: 1.4; }
+.question-box .answer-feedback.correct { background: #e0f2dc; border-color: #24644c; }
+.question-box .answer-feedback.incorrect { background: #fff0dd; border-color: #9b5c17; font-size: 24px; }
+.answer-footer { justify-content: flex-end; min-height: 78px; }
+@media(max-width:600px) { .question-box .answer-feedback { font-size: 24px; }.question-box .answer-feedback.incorrect { font-size: 20px; }.answer-footer { min-height: 0; } }

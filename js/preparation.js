@@ -1,8 +1,8 @@
 "use strict";
 
 (() => {
-  // 小学1年生の配当漢字80字。問題データや読み方はここで作成しない。
-  const kanji = Array.from("一右雨円王音下火花貝学気九休玉金空月犬見五口校左三山子四糸字耳七車手十出女小上森人水正生青夕石赤千川先早草足村大男竹中虫町天田土二日入年白八百文木本名目立力林六");
+  // CSVの対象漢字の初出順を準備画面と出題側で共有する。
+  const kanji = window.KanjiQuestions.kanji;
   const storageKey = "kanji-reading-game:selected-kanji:v1";
   const list = document.getElementById("kanji-list");
   const count = document.getElementById("selection-count");
