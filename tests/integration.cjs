@@ -41,6 +41,10 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  // Five completed practice sets award one star; quitting an incomplete set does not count.
  for(let n=0;n<5;n++){await answerSet('practice',10);await p.getByRole('button',{name:'かんじを えらぶ がめんへ',exact:true}).click();}
  assert.equal((await state()).users['1-1'].practice,0);assert.equal((await state()).users['1-1'].stars,2);
+ const finished=p.getByRole('button',{name:'✓ きょうの れんしゅうは おわったよ',exact:true});assert(await finished.isDisabled());
+ await p.reload();assert(await finished.isDisabled());await p.evaluate(()=>begin('practice'));assert.equal(await p.locator('.play-card').count(),0);
+ // Move recorded completions to yesterday: the daily allowance resets, cumulative stars remain.
+ await p.evaluate(key=>{const d=JSON.parse(localStorage.getItem(key));for(const log of d.users['1-1'].log)log.date=new Date(Date.now()-86400000).toISOString();localStorage.setItem(key,JSON.stringify(d));},key);await p.reload();
  await p.getByRole('button',{name:'れんしゅうを はじめる',exact:true}).click();p.once('dialog',d=>d.accept());await p.getByRole('button',{name:'やめる',exact:true}).click();assert.equal((await state()).users['1-1'].log.length,6);
  // A second profile sees neither the first child's selected kanji, stars, nor cards.
  await p.getByRole('button',{name:'とうろく きりかえ'}).click();await login(1,2);assert.equal(await p.locator('.kanji[aria-pressed="true"]').count(),0);
