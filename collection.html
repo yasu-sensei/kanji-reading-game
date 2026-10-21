@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#171d39">
   <link rel="stylesheet" href="css/rewards.css">
   <script src="js/cards.js" defer></script>
+  <script src="js/game-store.js" defer></script>
   <script src="js/rewards.js" defer></script>
   <title>なかまのずかん | かんじの ぼうけん</title>
 </head>
@@ -20,7 +21,7 @@
     </nav>
   </header>
   <main id="main">
-    <p class="trial-note"><span>おためし</span> がくしゅうの星・きろくとは べつの、おためし画面です。</p>
+    <p class="trial-note" id="profile-note"></p>
     <p id="storage-message" class="notice" role="status" aria-live="polite"></p>
     <div class="page-heading"><div><p class="eyebrow">がんばったぶん、たからものが ふえる。</p><h1>なかまのずかん</h1><p>カードを タップすると、おおきく みられるよ。</p></div><a class="secondary-button" href="gacha.html">ガチャを ひく <span aria-hidden="true">→</span></a></div>
     <section class="collection-progress" aria-label="あつめたカード">
@@ -35,8 +36,8 @@
   </main>
   <dialog id="card-dialog" class="card-dialog" aria-labelledby="detail-name"><button id="close-detail" type="button" class="close-button" aria-label="カードをとじる">×</button><div id="detail-card"></div><p id="detail-tier" class="eyebrow"></p><h2 id="detail-name"></h2><p id="detail-count"></p><button id="detail-done" type="button" class="secondary-button">ずかんに もどる</button></dialog>
   <footer class="site-footer">
-    <p>おためしのカードは、このブラウザーに ほぞんするよ。<br>みんなで つかうと、同じずかんに なるよ。</p>
-    <details><summary>おとなの方へ</summary><p>この画面は表示・操作確認用です。学習による星の付与、児童別管理、本番の排出率は未連携です。</p><button id="reset-demo" class="text-button" type="button">おためしの記録をリセット</button></details>
+    <p>カードは、とうろくした くみ・ばんごうごとに、このブラウザーに ほぞんするよ。</p>
+    <details data-demo-only><summary>おとなの方へ</summary><p>この画面は表示・操作確認用です。学習による星の付与、児童別管理、本番の排出率は未連携です。</p><button id="reset-demo" class="text-button" type="button">おためしの記録をリセット</button></details>
   </footer>
   <noscript><p class="notice">JavaScriptを有効にすると、カードをあつめられます。</p></noscript>
 </body>

@@ -21,7 +21,7 @@ const base='http://127.0.0.1:8000';
  try{
   const context=await browser.newContext({hasTouch:true,viewport:{width:1024,height:768}});
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(base+'/index.html');
+  await page.goto(base+'/preparation.html');
   assert(await page.locator('#start-quiz').isDisabled());
   await page.getByRole('button',{name:'木',exact:true}).click();
   assert(await page.locator('#start-quiz').isEnabled());
@@ -87,7 +87,7 @@ const base='http://127.0.0.1:8000';
   // Quiz has no writes to reward or preparation storage.
   assert.equal(await page.evaluate(()=>localStorage.getItem('kanji-reading-game:rewards-demo:v1')),null);
   const denied=await browser.newContext();await denied.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw new DOMException('Denied','SecurityError')}}));
-  const p=await denied.newPage();await p.goto(base+'/index.html');await p.getByRole('button',{name:'木',exact:true}).click();await p.locator('#start-quiz').click();await p.locator('#question-panel').waitFor({state:'visible'});
+  const p=await denied.newPage();await p.goto(base+'/preparation.html');await p.getByRole('button',{name:'木',exact:true}).click();await p.locator('#start-quiz').click();await p.locator('#question-panel').waitFor({state:'visible'});
   await p.goto(base+'/quiz.html');await p.locator('#load-message').waitFor({state:'visible'});assert.match(await p.locator('#load-message').textContent(),/えらびなおして/);
   assert.deepEqual(errors,[]);
   console.log('PASS: CSV parser and 400 originals, selected targets, 10-question set, first-answer scoring, double-click safety, one-kanji repetition, restart, loading/error/retry, keyboard, storage denial, Chromebook touch sizing and mobile layout');

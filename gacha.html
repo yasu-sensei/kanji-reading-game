@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#171d39">
   <link rel="stylesheet" href="css/rewards.css">
   <script src="js/cards.js" defer></script>
+  <script src="js/game-store.js" defer></script>
   <script src="js/rewards.js" defer></script>
   <title>ごほうびガチャ | かんじの ぼうけん</title>
 </head>
@@ -20,11 +21,11 @@
     </nav>
   </header>
   <main id="main">
-    <p class="trial-note"><span>おためし</span> がくしゅうの星・きろくとは べつの、おためし画面です。</p>
+    <p class="trial-note" id="profile-note"></p>
     <p id="storage-message" class="notice" role="status" aria-live="polite"></p>
     <div class="page-heading">
       <div><p class="eyebrow">ちいさな がんばりを、たからものに。</p><h1>ごほうびガチャ</h1><p>どんな なかまに あえるかな？</p></div>
-      <p class="star-wallet"><span aria-hidden="true">★</span> おためしの星 <strong id="star-count">—</strong> こ</p>
+      <p class="star-wallet"><span aria-hidden="true">★</span> がくしゅうの星 <strong id="star-count">—</strong> こ</p>
     </div>
     <div class="gacha-layout">
       <section class="summon-panel" aria-label="カードをひく">
@@ -56,8 +57,8 @@
     </section>
   </main>
   <footer class="site-footer">
-    <p>おためしのカードは、このブラウザーに ほぞんするよ。<br>みんなで つかうと、同じずかんに なるよ。</p>
-    <details><summary>おとなの方へ</summary><p>この画面は表示・操作確認用です。学習による星の付与、児童別管理、本番の排出率は未連携です。</p><button id="reset-demo" class="text-button" type="button">おためしの記録をリセット</button></details>
+    <p>カードは、とうろくした くみ・ばんごうごとに、このブラウザーに ほぞんするよ。</p>
+    <details data-demo-only><summary>おとなの方へ</summary><p>この画面は表示・操作確認用です。学習による星の付与、児童別管理、本番の排出率は未連携です。</p><button id="reset-demo" class="text-button" type="button">おためしの記録をリセット</button></details>
   </footer>
   <noscript><p class="notice">JavaScriptを有効にすると、カードをあつめられます。</p></noscript>
 </body>
