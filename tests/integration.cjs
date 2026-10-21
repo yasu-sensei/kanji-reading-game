@@ -14,13 +14,14 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  async function login(cls,num){await p.locator('#cls').selectOption(String(cls));await p.locator('#num').selectOption(String(num));await p.getByRole('button',{name:'はじめる',exact:true}).click();await p.locator('.kanji').first().waitFor();}
  async function answerSet(mode,correctCount=10){
   await p.getByRole('button',{name:mode==='homework'?'しゅくだいを はじめる':'れんしゅうを はじめる',exact:true}).click();
-  for(let n=0;n<10;n++){
-   await p.waitForFunction(n=>document.querySelector('.question-toolbar strong')?.textContent.trim().endsWith(`${n+1} / 10`),n);
+  const total=mode==='homework'?20:10;
+  for(let n=0;n<total;n++){
+   await p.waitForFunction(({n,total})=>document.querySelector('.question-toolbar strong')?.textContent.trim().endsWith(`${n+1} / ${total}`),{n,total});
    const id=Number(await p.locator('.play-card').getAttribute('data-question-id'));const q=byId.get(id);assert.equal(q.target,'木');
    const reading=n<correctCount?q.correct:q.choices.find(x=>x!==q.correct);
    const immediate=await p.evaluate(async ({reading,key})=>{const choices=[...document.querySelectorAll('.choice')];const index=choices.findIndex(el=>el.textContent===reading);const promise=window.answer(index);const verdict=document.querySelector('.feedback').textContent;await promise;return {verdict,data:JSON.parse(localStorage.getItem(key)),play:!!document.querySelector('.play-card')};},{reading,key});
    assert.match(immediate.verdict,n<correctCount?/○/:/×/);
-   if(n===9){assert.equal(immediate.data.users['1-1'].log.at(-1).score,correctCount);assert(immediate.play,'record is committed while question ten feedback is still displayed');}
+   if(n===total-1){assert.equal(immediate.data.users['1-1'].log.at(-1).score,correctCount);assert(immediate.play,'record is committed while question ten feedback is still displayed');}
   }
   await p.getByRole('heading',{name:'けっか はっぴょう！'}).waitFor();
  }
@@ -28,7 +29,7 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  assert.equal((await state()).users['1-1'].stars,0);
  const order=await p.locator('.kanji').allTextContents();assert.deepEqual(order,[...new Set(questions.map(q=>q.target))]);
  await p.getByRole('button',{name:'木',exact:true}).click();await p.waitForFunction(()=>document.querySelector('[aria-label="木"]').getAttribute('aria-pressed')==='true');
- await answerSet('homework',10);
+ await answerSet('homework',20);
  assert.equal((await state()).users['1-1'].stars,2);assert.equal((await state()).users['1-1'].log.length,1);
  // Re-saving the same completion never duplicates stars or records.
  await p.evaluate(()=>window.retryCommit());assert.equal((await state()).users['1-1'].stars,2);

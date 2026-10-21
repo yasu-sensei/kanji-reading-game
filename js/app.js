@@ -26,7 +26,7 @@
     render();
   }
   async function changeUser() {
-    if (game && !game.committed && !confirm("とちゅうの 10もんは きろくされません。もどりますか？")) return;
+    if (game && !game.committed && !confirm("とちゅうの もんだいは きろくされません。もどりますか？")) return;
     if (await update(next => { next.active = ""; })) { cancelTimer(); game = review = feedback = null; screen = "home"; }
     render();
   }
@@ -39,16 +39,16 @@
     await update(next => { store.profile(next, id).selected = value ? [...KANJI] : []; }); render();
   }
   function available() { const set = new Set(user().selected); return QUESTIONS.filter(q => set.has(q.k)); }
-  function poolTen() {
+  function poolQuestions(total) {
     const all = available(), history = user().history;
     // 添付試作版の暫定配分を維持。正式な習熟度の計算は未確定。
     const unseen = shuffle(all.filter(q => !history[q.id]));
     const weak = shuffle(all.filter(q => history[q.id]?.wrong > 0)).sort((a, b) => history[b.id].wrong - history[a.id].wrong);
     const rest = shuffle(all.filter(q => history[q.id]));
     const chosen = [], ids = new Set();
-    function add(items, n) { for (const q of items) { if (chosen.length >= 10 || n <= 0) break; if (ids.has(q.id)) continue; chosen.push(q); ids.add(q.id); n--; } }
-    add(unseen, 5); add(weak, 3); add(rest, 10 - chosen.length); add(shuffle(all), 10 - chosen.length);
-    while (chosen.length < 10) chosen.push(...shuffle(all).slice(0, 10 - chosen.length));
+    function add(items, n) { for (const q of items) { if (chosen.length >= total || n <= 0) break; if (ids.has(q.id)) continue; chosen.push(q); ids.add(q.id); n--; } }
+    add(unseen, 5); add(weak, 3); add(rest, total - chosen.length); add(shuffle(all), total - chosen.length);
+    while (chosen.length < total) chosen.push(...shuffle(all).slice(0, total - chosen.length));
     return shuffle(chosen).map(q => ({ ...q, opts: shuffle([q.r, ...q.wrong]) }));
   }
   function begin(mode) {
@@ -58,7 +58,7 @@
     if (!available().length) { warning = "かんじを 1ついじょう えらんでね！"; render(); return; }
     if (mode === "homework" && user().lastHomework === today()) { warning = "きょうの しゅくだいは おわっているよ！"; render(); return; }
     if (mode === "practice" && practiceToday(user()) >= 5) { warning = "きょうの れんしゅうは おわったよ。また あした！"; render(); return; }
-    warning = ""; game = { id: crypto.randomUUID(), profile: data.active, mode, items: poolTen(), idx: 0, answers: [], committed: false, awarded: 0, reviewFinished: false };
+    warning = ""; game = { id: crypto.randomUUID(), profile: data.active, mode, items: poolQuestions(mode === "homework" ? 20 : 10), idx: 0, answers: [], committed: false, awarded: 0, reviewFinished: false };
     review = feedback = null; screen = "play"; render();
   }
   async function commitGame() {
@@ -72,7 +72,7 @@
       if (prior) { award = prior.award; return; }
       if (current.mode === "homework") {
         if (u.lastHomework === today()) throw new Error("きょうの しゅくだいは すでに きろくされています。");
-        award = score === 10 ? 2 : score >= 5 ? 1 : 0; u.lastHomework = today();
+        award = score === current.items.length ? 2 : score >= current.items.length / 2 ? 1 : 0; u.lastHomework = today();
       } else { if (practiceToday(u) >= 5) throw new Error("きょうの れんしゅうは 5かい おわっています。また あした！"); u.practice++; if (u.practice >= 5) { award = 1; u.practice = 0; } }
       for (const answer of current.answers) { const h = u.history[answer.id] ?? { seen: 0, correct: 0, wrong: 0 }; h.seen++; if (answer.ok) h.correct++; else h.wrong++; u.history[answer.id] = h; }
       u.stars += award;
@@ -89,12 +89,12 @@
     const ok = q.opts[index] === q.r;
     feedback = { ok, choice: index }; game.answers.push({ id: q.id, ok });
     render(); // 正誤はタップした処理内ですぐ表示。
-    if (current.answers.length === 10) { await commitGame(); if (game !== current) return; render(); }
+    if (current.answers.length === current.items.length) { await commitGame(); if (game !== current) return; render(); }
     cancelTimer();
-    timer = setTimeout(() => { if (screen !== "play" || game !== current) return; feedback = null; game.idx++; if (game.idx >= 10) screen = "result"; render(); }, ok ? 900 : 1600);
+    timer = setTimeout(() => { if (screen !== "play" || game !== current) return; feedback = null; game.idx++; if (game.idx >= game.items.length) screen = "result"; render(); }, ok ? 1500 : 2000);
   }
   async function retryCommit() { if (await commitGame()) warning = ""; render(); }
-  function quit() { if (game?.committed) { nav("result"); return; } if (!confirm("とちゅうで やめる？ 10もん おわっていないと きろくは のこらないよ。")) return; cancelTimer(); game = review = feedback = null; screen = "select"; render(); }
+  function quit() { if (game?.committed) { nav("result"); return; } if (!confirm("とちゅうで やめる？ さいごまで おわっていないと きろくは のこらないよ。")) return; cancelTimer(); game = review = feedback = null; screen = "select"; render(); }
   function startReview() {
     if (!game?.committed) return;
     const missed = game.items.filter((q, i) => !game.answers[i].ok);
@@ -115,7 +115,7 @@
         else { game.reviewFinished = true; screen = "reviewDone"; }
       }
       render();
-    }, ok ? 900 : 1800);
+    }, ok ? 1500 : 2000);
   }
   function nav(to) { cancelTimer(); feedback = review = null; if (to !== "result") game = null; screen = to; warning = ""; render(); }
   function goRewards(page) { cancelTimer(); location.href = page + ".html"; }
@@ -129,15 +129,15 @@
     const u = user();
     html += `<div class="row user-header"><span class="badge">${esc(data.active.replace("-", "くみ "))}ばん</span><span class="badge" id="learning-stars">⭐ ${u.stars}こ</span>${b("とうろく きりかえ", "changeUser()", "small secondary")}</div>`;
     if (screen === "home") screen = "select";
-    if (screen === "select") html += `<section class="card"><h2>① ならった かんじを えらぼう！</h2><p class="muted">タッチで えらぶ・もういちどで はずす</p><div class="row"><span class="badge">${u.selected.length} / 80じ</span><div class="buttons">${b("ぜんぶ えらぶ", "selectAll(true)", "small secondary")}${b("ぜんぶ はずす", "selectAll(false)", "small secondary")}</div></div><div class="grid">${KANJI.map(k => `<button type="button" class="kanji ${u.selected.includes(k) ? "on" : ""}" aria-label="${k}" aria-pressed="${u.selected.includes(k)}" onclick="toggle('${k}')" ${saving ? "disabled" : ""}>${k}</button>`).join("")}</div><p class="muted">えらんだ かんじの ことば：${available().length}もん</p></section><section class="card stack"><h2>② どちらで あそぶ？</h2><p>🏠 しゅくだい：1にち 1かい（10もん）</p><button type="button" class="primary full" onclick="begin('homework')" ${u.lastHomework === today() || saving ? "disabled" : ""}>${u.lastHomework === today() ? "✓ きょうの しゅくだいは おわったよ" : "しゅくだいを はじめる"}</button><p>✏️ れんしゅう：1にち 5かいまで（きょう あと ${Math.max(0, 5 - practiceToday(u))}かい）</p><p>あと ${5 - u.practice}かいで ⭐ 1こ</p><button type="button" class="full secondary" onclick="begin('practice')" ${practiceToday(u) >= 5 || saving ? "disabled" : ""}>${practiceToday(u) >= 5 ? "✓ きょうの れんしゅうは おわったよ" : "れんしゅうを はじめる"}</button><div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')", "full")}${b("📖 ずかん", "goRewards('collection')", "full")}</div></section>`;
+    if (screen === "select") html += `<section class="card"><h2>① ならった かんじを えらぼう！</h2><p class="muted">タッチで えらぶ・もういちどで はずす</p><div class="row"><span class="badge">${u.selected.length} / 80じ</span><div class="buttons">${b("ぜんぶ えらぶ", "selectAll(true)", "small secondary")}${b("ぜんぶ はずす", "selectAll(false)", "small secondary")}</div></div><div class="grid">${KANJI.map(k => `<button type="button" class="kanji ${u.selected.includes(k) ? "on" : ""}" aria-label="${k}" aria-pressed="${u.selected.includes(k)}" onclick="toggle('${k}')" ${saving ? "disabled" : ""}>${k}</button>`).join("")}</div><p class="muted">えらんだ かんじの ことば：${available().length}もん</p></section><section class="card stack"><h2>② どちらで あそぶ？</h2><p>🏠 しゅくだい：1にち 1かい（20もん）</p><button type="button" class="primary full" onclick="begin('homework')" ${u.lastHomework === today() || saving ? "disabled" : ""}>${u.lastHomework === today() ? "✓ きょうの しゅくだいは おわったよ" : "しゅくだいを はじめる"}</button><p>✏️ れんしゅう：1にち 5かいまで（きょう あと ${Math.max(0, 5 - practiceToday(u))}かい）</p><p>あと ${5 - u.practice}かいで ⭐ 1こ</p><button type="button" class="full secondary" onclick="begin('practice')" ${practiceToday(u) >= 5 || saving ? "disabled" : ""}>${practiceToday(u) >= 5 ? "✓ きょうの れんしゅうは おわったよ" : "れんしゅうを はじめる"}</button><div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')", "full")}${b("📖 ずかん", "goRewards('collection')", "full")}</div></section>`;
     if (screen === "play" || screen === "review") {
       const isReview = screen === "review", q = isReview ? review.items[review.idx] : game.items[game.idx];
-      const num = isReview ? review.idx + 1 : game.idx + 1, max = isReview ? review.items.length : 10;
-      html += `<section class="card play-card" data-question-id="${q.id}"><div class="question-toolbar"><strong>${isReview ? "ふくしゅう " + review.round + "かいめ" : game.mode === "homework" ? "しゅくだい" : "れんしゅう"} ${num} / ${max}</strong>${b("やめる", isReview ? "nav('result')" : "quit()", "small secondary")}</div><div class="progress" role="progressbar" aria-label="こたえた もんだい" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${num - 1}"><div style="width:${(num - 1) / max * 100}%"></div></div><div class="question">${esc(q.w)}</div><div class="feedback ${feedback ? feedback.ok ? "good" : "bad" : ""}" role="status" aria-live="polite">${feedback ? feedback.ok ? "○ せいかい！" : "× せいかいは「" + esc(q.r) + "」" : ""}</div><p class="muted">ただしい よみかたを えらぼう！</p><div class="choices">${q.opts.map((option, i) => `<button type="button" ${feedback ? "disabled" : ""} class="choice ${feedback ? option === q.r ? "correct" : i === feedback.choice ? "wrong" : "" : ""}" onclick="${isReview ? "reviewAnswer" : "answer"}(${i})">${esc(option)}</button>`).join("")}</div></section>`;
+      const num = isReview ? review.idx + 1 : game.idx + 1, max = isReview ? review.items.length : game.items.length;
+      html += `<section class="card play-card" data-question-id="${q.id}"><div class="question-toolbar"><strong>${isReview ? "ふくしゅう " + review.round + "かいめ" : game.mode === "homework" ? "しゅくだい" : "れんしゅう"} ${num} / ${max}</strong>${b("やめる", isReview ? "nav('result')" : "quit()", "small secondary")}</div><div class="progress" role="progressbar" aria-label="こたえた もんだい" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${num - 1}"><div style="width:${(num - 1) / max * 100}%"></div></div><div class="question">${esc(q.w)}</div><div class="feedback ${feedback ? feedback.ok ? "good" : "bad" : ""}" role="status" aria-live="polite">${feedback ? feedback.ok ? "○ せいかい！" : "× たしかめよう" : ""}</div>${feedback ? `<div class="reading-reinforcement"><div class="remember-word">${esc(q.w)}</div><div class="remember-reading">${esc(q.r)}</div></div>` : `<p class="muted">ただしい よみかたを えらぼう！</p>`}<div class="choices">${q.opts.map((option, i) => `<button type="button" ${feedback ? "disabled" : ""} class="choice ${feedback ? option === q.r ? "correct" : i === feedback.choice ? "wrong" : "" : ""}" onclick="${isReview ? "reviewAnswer" : "answer"}(${i})">${esc(option)}</button>`).join("")}</div></section>`;
     }
     if (screen === "result") {
-      const score = game.answers.filter(a => a.ok).length, missed = 10 - score;
-      html += `<section class="card stack"><h2>けっか はっぴょう！</h2><div class="big">${score} / 10</div><div class="big star">${"★".repeat(game.awarded) || "☆"}</div><p style="text-align:center">${game.committed ? "きろくを ほぞんしたよ。こんかいの ⭐：" + game.awarded + "こ" : "まだ ほぞんできていません。"}</p>${!game.committed ? b("もういちど ほぞんする", "retryCommit()", "primary full") : ""}${missed && game.committed && !game.reviewFinished ? b("まちがえた もんだいを ふくしゅう", "startReview()", "primary full") : ""}${b("かんじを えらぶ がめんへ", "nav('select')", "secondary full")}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')")}${b("📖 ずかん", "goRewards('collection')")}</div></section>`;
+      const score = game.answers.filter(a => a.ok).length, missed = game.items.length - score;
+      html += `<section class="card stack"><h2>けっか はっぴょう！</h2><div class="big">${score} / ${game.items.length}</div><div class="big star">${"★".repeat(game.awarded) || "☆"}</div><p style="text-align:center">${game.committed ? "きろくを ほぞんしたよ。こんかいの ⭐：" + game.awarded + "こ" : "まだ ほぞんできていません。"}</p>${!game.committed ? b("もういちど ほぞんする", "retryCommit()", "primary full") : ""}${missed && game.committed && !game.reviewFinished ? b("まちがえた もんだいを ふくしゅう", "startReview()", "primary full") : ""}${b("かんじを えらぶ がめんへ", "nav('select')", "secondary full")}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')")}${b("📖 ずかん", "goRewards('collection')")}</div></section>`;
     }
     if (screen === "reviewDone") html += `<section class="card stack"><h2>ふくしゅう おしまい！</h2><p>がんばったね！ つぎも ちょうせんしよう。</p>${b("じゅんびがめんへ", "nav('select')", "primary full")}</section>`;
     html += `<p class="foot">400問の提供CSVを使用｜学級・番号別の端末内保存｜別端末への同期は未連携</p>`;
