@@ -130,7 +130,8 @@ function initApp(fetch,setTimeout,previewListen){
     const parts = window.WORD_READINGS[String(q.id)];
     if (!parts) return esc(q.w);
     return parts.map(([text, reading]) => {
-      const needsReading = reading && Array.from(text).some(char => !selected.has(char));
+      // 熟字訓など語全体の読みは補助表示しない。
+      const needsReading = reading && Array.from(text).length === 1 && !selected.has(text);
       return needsReading ? `<ruby>${esc(text)}<rp>（</rp><rt>${esc(reading)}</rt><rp>）</rp></ruby>` : esc(text);
     }).join("");
   }
