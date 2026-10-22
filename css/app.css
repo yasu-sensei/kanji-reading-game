@@ -22,3 +22,7 @@
 
 .buttons { max-width: 100%; }
 .buttons > button { flex: 0 0 auto; white-space: nowrap; min-height: 48px; }
+
+.gold-star { color: #936600; }
+.white-star { color: #fff; -webkit-text-stroke: 1px #60708a; text-shadow: 0 1px 2px #60708a; }
+.reward-rule { background: #f1f6ff; padding: 12px; border-radius: 12px; line-height: 1.8; margin: 0; }

@@ -2,7 +2,7 @@ const {chromium}=require('playwright');const assert=require('node:assert/strict'
 (async()=>{const b=await chromium.launch({headless:true,executablePath:'/usr/bin/chromium',args:['--no-sandbox']});try{
  const c=await b.newContext({reducedMotion:'reduce'});await c.addInitScript(()=>{const native=setTimeout;window.setTimeout=(fn,ms,...args)=>native(fn,ms>500?15:ms,...args)});const p=await c.newPage();
  async function seed(){await p.goto('http://127.0.0.1:8000/');await p.waitForSelector('#cls');await p.evaluate(key=>{const u=GameStore.freshProfile();u.selected=['木'];localStorage.setItem(key,JSON.stringify({active:'1-1',users:{'1-1':u}}))},key);await p.reload();await p.waitForSelector('.kanji');}
- async function finish(score,fail=false){await p.getByRole('button',{name:'しゅくだいを はじめる',exact:true}).click();for(let n=0;n<20;n++){
+ async function finish(score,fail=false){await p.getByRole('button',{name:'ちょうせんを はじめる',exact:true}).click();for(let n=0;n<20;n++){
  await p.waitForFunction(n=>document.querySelector('.question-toolbar strong')?.textContent.trim().endsWith(`${n+1} / 20`),n);
  await p.evaluate(async({n,score,fail})=>{if(n===19&&fail){window.originalSet=Storage.prototype.setItem;Storage.prototype.setItem=()=>{throw new DOMException('Full','QuotaExceededError')}}const answerCorrect=document.querySelector('.play-card').dataset.questionId;const response=await fetch('/data/kanji_400_final.csv');const q=KanjiQuestions.parseQuestions(await response.text()).find(q=>q.id===Number(answerCorrect));const wanted=n<score?q.correct:q.choices.find(v=>v!==q.correct);const index=[...document.querySelectorAll('.choice')].findIndex(el=>el.textContent===wanted);await answer(index);},{n,score,fail});
  }await p.getByRole('heading',{name:'けっか はっぴょう！'}).waitFor();}
