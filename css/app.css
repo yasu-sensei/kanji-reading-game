@@ -19,3 +19,6 @@
 .reading-slot > * { grid-area: 1 / 1; }
 .reading-slot .remember-reading { line-height: 1.4; overflow-wrap: anywhere; }
 .play-card .reading-prompt { margin: 0; }
+
+.buttons { max-width: 100%; }
+.buttons > button { flex: 0 0 auto; white-space: nowrap; min-height: 48px; }
