@@ -6,7 +6,16 @@
 .reading-reinforcement { background: #fff; text-align: center; padding: 12px; overflow-wrap: anywhere; }
 .remember-word { color: #1e2f50; font-size: clamp(30px, 5vw, 46px); font-weight: 800; }
 .remember-reading { color: #124db0; font-size: clamp(36px, 6vw, 54px); font-weight: 800; }
-.play-card:has(.reading-reinforcement) > .question { display: none; }
+
 
 .question ruby, .remember-word ruby { ruby-align: center; }
 .question rt, .remember-word rt { font-size: .42em; font-weight: 700; }
+
+/* Reserve the same word, verdict and reading space before and after an answer. */
+.answer-display { text-align: center; }
+.answer-display .feedback { margin: 8px 0 0; min-height: 48px; }
+.answer-display .question { margin: 0; padding: 10px 8px; line-height: 1.6; overflow-wrap: anywhere; }
+.reading-slot { display: grid; align-items: center; padding: 0 8px 12px; }
+.reading-slot > * { grid-area: 1 / 1; }
+.reading-slot .remember-reading { line-height: 1.4; overflow-wrap: anywhere; }
+.play-card .reading-prompt { margin: 0; }
