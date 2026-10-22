@@ -33,6 +33,7 @@ def build(output, embed_images=True):
 '''
     html += "window.REWARD_CARDS = " + embedded(cards) + ";\n"
     html += (ROOT / "js/questions.js").read_text() + "\n"
+    html += (ROOT / "js/word-readings.js").read_text() + "\n"
     html += (ROOT / "js/game-store.js").read_text() + "\n"
     html += "const screens = " + embedded(screens) + ";\n"
     html += "const styles = " + embedded(styles) + ";\n"

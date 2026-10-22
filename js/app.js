@@ -5,14 +5,13 @@
   let QUESTIONS = [], KANJI = [], data = { users: {}, active: "" };
   let screen = "home", game = null, review = null, feedback = null, timer = null, warning = "", saving = false;
   const esc = x => String(x).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  // 表示用の補助読み。CSVの語彙・正答・選択肢は変更しない。
-  const supportingReadings = { 曜: "よう", 葉: "は", 声: "ごえ", 頭: "とう", 長: "ちょう", 紙: "し", 国: "ごく", 才: "さい", 色: "いろ", 作: "さく", 数: "すう", 門: "もん", 道: "みち", 地: "ち", 毎: "まい", 記: "き", 光: "こう", 電: "でん", 元: "げん", 毛: "け", 鳥: "ちょう", 夏: "なつ", 魚: "ぎょ", 心: "しん", 来: "らい", 原: "げん", 方: "がた", 朝: "ちょう", 遠: "えん", 体: "たい" };
   function questionWord(q) {
-    return Array.from(q.w, char => {
-      let reading = supportingReadings[char];
-      if (q.id === 100 && char === "紙") reading = "がみ";
-      if (q.id === 373 && char === "道") reading = "どう";
-      return reading ? `<ruby>${esc(char)}<rp>（</rp><rt>${reading}</rt><rp>）</rp></ruby>` : esc(char);
+    const selected = new Set(user()?.selected || []);
+    const parts = window.WORD_READINGS[String(q.id)];
+    if (!parts) return esc(q.w);
+    return parts.map(([text, reading]) => {
+      const needsReading = reading && Array.from(text).some(char => !selected.has(char));
+      return needsReading ? `<ruby>${esc(text)}<rp>（</rp><rt>${esc(reading)}</rt><rp>）</rp></ruby>` : esc(text);
     }).join("");
   }
   const shuffle = window.KanjiQuestions.shuffle;
