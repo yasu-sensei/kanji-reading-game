@@ -26,22 +26,22 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
   await p.getByRole('heading',{name:'けっか はっぴょう！'}).waitFor();
  }
  await p.goto('http://127.0.0.1:8000/');await login(1,1);
- assert.equal((await state()).users['1-1'].stars,0);
+ assert.equal((await state()).users['1-1'].stars,4);
  const order=await p.locator('.kanji').allTextContents();assert.deepEqual(order,[...new Set(questions.map(q=>q.target))]);
  await p.getByRole('button',{name:'木',exact:true}).click();await p.waitForFunction(()=>document.querySelector('[aria-label="木"]').getAttribute('aria-pressed')==='true');
  await answerSet('homework',20);
- assert.equal((await state()).users['1-1'].stars,2);assert.equal((await state()).users['1-1'].log.length,1);
+ assert.equal((await state()).users['1-1'].stars,6);assert.equal((await state()).users['1-1'].log.length,1);
  // Re-saving the same completion never duplicates stars or records.
- await p.evaluate(()=>window.retryCommit());assert.equal((await state()).users['1-1'].stars,2);
+ await p.evaluate(()=>window.retryCommit());assert.equal((await state()).users['1-1'].stars,6);
  await p.getByRole('button',{name:'🎁 ガチャ',exact:true}).click();await p.locator('#machine-handle').waitFor();
- assert.equal(await p.locator('#star-count').textContent(),'2');assert(await p.locator('#add-demo-stars').isHidden());
+ assert.equal(await p.locator('#star-count').textContent(),'6');assert(await p.locator('#add-demo-stars').isHidden());
  await p.locator('#draw-card').evaluate(el=>{el.click();el.click()});await p.waitForFunction(()=>document.querySelector('.summon-panel').dataset.stage==='revealed');
- assert.equal((await state()).users['1-1'].stars,1);assert.equal((await state()).users['1-1'].cardCounts['001'],1);
+ assert.equal((await state()).users['1-1'].stars,5);assert.equal((await state()).users['1-1'].cardCounts['001'],1);
  await p.getByRole('link',{name:'ずかん',exact:true}).click();assert.equal(await p.locator('#collection-count').textContent(),'1');
  await p.getByRole('link',{name:'かんじ',exact:true}).click();await p.getByRole('button',{name:'✓ きょうの しゅくだいは おわったよ'}).waitFor();assert(await p.getByRole('button',{name:'✓ きょうの しゅくだいは おわったよ'}).isDisabled());
  // Five completed practice sets award one star; quitting an incomplete set does not count.
  for(let n=0;n<5;n++){await answerSet('practice',10);await p.getByRole('button',{name:'かんじを えらぶ がめんへ',exact:true}).click();}
- assert.equal((await state()).users['1-1'].practice,0);assert.equal((await state()).users['1-1'].stars,2);
+ assert.equal((await state()).users['1-1'].practice,0);assert.equal((await state()).users['1-1'].stars,6);
  const finished=p.getByRole('button',{name:'✓ きょうの れんしゅうは おわったよ',exact:true});assert(await finished.isDisabled());
  await p.reload();assert(await finished.isDisabled());await p.evaluate(()=>begin('practice'));assert.equal(await p.locator('.play-card').count(),0);
  // Move recorded completions to yesterday: the daily allowance resets, cumulative stars remain.
@@ -50,7 +50,7 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  // A second profile sees neither the first child's selected kanji, stars, nor cards.
  await p.getByRole('button',{name:'とうろく きりかえ'}).click();await login(1,2);assert.equal(await p.locator('.kanji[aria-pressed="true"]').count(),0);
  await p.getByRole('button',{name:'📖 ずかん'}).click();assert.equal(await p.locator('#collection-count').textContent(),'0');
- await p.goto('http://127.0.0.1:8000/gacha.html');assert.equal(await p.locator('#star-count').textContent(),'0');assert(await p.locator('#draw-card').isDisabled());
+ await p.goto('http://127.0.0.1:8000/gacha.html');assert.equal(await p.locator('#star-count').textContent(),'4');assert(!(await p.locator('#draw-card').isDisabled()));
  await p.goto('http://127.0.0.1:8000/');await p.getByRole('button',{name:'とうろく きりかえ'}).click();await login(1,1);assert.equal(await p.locator('.kanji[aria-pressed="true"]').count(),1);
  // Review never grants extra stars, and stops after at most two rounds.
  await answerSet('practice',8);const stars=(await state()).users['1-1'].stars;const logs=(await state()).users['1-1'].log.length;

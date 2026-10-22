@@ -32,7 +32,7 @@
     const cls = document.getElementById("cls").value, num = document.getElementById("num").value;
     const id = cls + "-" + num;
     if (!store.profilePattern.test(id)) { warning = "くみと ばんごうを えらんでね。"; render(); return; }
-    if (await update(next => { next.users[id] ??= store.freshProfile(); next.active = id; })) screen = "select";
+    if (await update(next => { if (!next.users[id]) next.users[id] = { ...store.freshProfile(), stars: 4, welcomeGiftReceived: true }; next.active = id; })) screen = "select";
     render();
   }
   async function changeUser() {
