@@ -10,6 +10,14 @@ for (const q of questions) {
  assert.equal(parts.map(p=>p[0]).join(''),q.word);
  assert.equal(normalize(parts.map(([t,r])=>r||t).join('')),normalize(q.correct),q.word);
 }
+const appSource=fs.readFileSync('js/app.js','utf8');
+const helper=appSource.slice(appSource.indexOf('  function questionWord'),appSource.indexOf('  const shuffle'));
+const renderEnv={window:env.window,esc:s=>s,user:()=>({selected:[]})};
+vm.createContext(renderEnv);vm.runInContext(helper+';this.format=questionWord;',renderEnv);
+for(const q of questions){
+ if(env.window.WORD_READINGS[q.id].some(([text,reading])=>reading&&Array.from(text).length>1)) assert(!renderEnv.format({id:q.id,w:q.word}).includes('<ruby>'),q.word);
+}
+assert(renderEnv.format({id:13,w:'小石'}).includes('<rt>いし</rt>'));
 (async()=>{
  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
  try {
