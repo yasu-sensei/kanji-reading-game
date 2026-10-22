@@ -61,3 +61,9 @@ python3 scripts/build-preview.py /tmp/kanji-preview
 ```
 
 出力先の `kanji-preview.html` とZIPに登録・準備・三択・ガチャ・図鑑をまとめます。通常のファイル構成と同じ保存キーを使いますが、保存先はブラウザーのオリジンごとに分かれます。
+
+## 初回サービスとGAS配信
+
+新規の学級・番号登録に星4個を一度付与します。既存登録の星は変更しません。
+
+`python3 scripts/build-gas.py /tmp/kanji-gas` でGAS配信用ZIPを生成します。[配信手順](gas/README.md)に従い、Google Apps ScriptにCode.gsとGame.htmlを配置してウェブアプリとしてデプロイしてください。
