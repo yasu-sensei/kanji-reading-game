@@ -13,7 +13,7 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  async function state(){return p.evaluate(key=>JSON.parse(localStorage.getItem(key)),key)}
  async function login(cls,num){await p.locator('#cls').selectOption(String(cls));await p.locator('#num').selectOption(String(num));await p.getByRole('button',{name:'はじめる',exact:true}).click();await p.locator('.kanji').first().waitFor();}
  async function answerSet(mode,correctCount=10){
-  await p.getByRole('button',{name:mode==='homework'?'しゅくだいを はじめる':'れんしゅうを はじめる',exact:true}).click();
+  await p.getByRole('button',{name:mode==='homework'?'ちょうせんを はじめる':'しゅぎょうを はじめる',exact:true}).click();
   const total=mode==='homework'?20:10;
   for(let n=0;n<total;n++){
    await p.waitForFunction(({n,total})=>document.querySelector('.question-toolbar strong')?.textContent.trim().endsWith(`${n+1} / ${total}`),{n,total});
@@ -38,15 +38,15 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  await p.locator('#draw-card').evaluate(el=>{el.click();el.click()});await p.waitForFunction(()=>document.querySelector('.summon-panel').dataset.stage==='revealed');
  assert.equal((await state()).users['1-1'].stars,5);assert.equal((await state()).users['1-1'].cardCounts['001'],1);
  await p.getByRole('link',{name:'ずかん',exact:true}).click();assert.equal(await p.locator('#collection-count').textContent(),'1');
- await p.getByRole('link',{name:'かんじ',exact:true}).click();await p.getByRole('button',{name:'✓ きょうの しゅくだいは おわったよ'}).waitFor();assert(await p.getByRole('button',{name:'✓ きょうの しゅくだいは おわったよ'}).isDisabled());
+ await p.getByRole('link',{name:'かんじ',exact:true}).click();await p.getByRole('button',{name:'✓ きょうの ちょうせんは おわったよ'}).waitFor();assert(await p.getByRole('button',{name:'✓ きょうの ちょうせんは おわったよ'}).isDisabled());
  // Five completed practice sets award one star; quitting an incomplete set does not count.
- for(let n=0;n<5;n++){await answerSet('practice',10);await p.getByRole('button',{name:'かんじを えらぶ がめんへ',exact:true}).click();}
+ for(let n=0;n<5;n++){await answerSet('practice',10);assert((await p.locator('.card.stack').innerText()).includes('しろ☆ 1こ もらったよ！'));if(n===4)assert((await p.locator('.card.stack').innerText()).includes('きん☆ 1こに かえたよ！'));assert.equal((await state()).users['1-1'].practice,(n+1)%5);await p.getByRole('button',{name:'かんじを えらぶ がめんへ',exact:true}).click();}
  assert.equal((await state()).users['1-1'].practice,0);assert.equal((await state()).users['1-1'].stars,6);
- const finished=p.getByRole('button',{name:'✓ きょうの れんしゅうは おわったよ',exact:true});assert(await finished.isDisabled());
+ const finished=p.getByRole('button',{name:'✓ きょうの しゅぎょうは おわったよ',exact:true});assert(await finished.isDisabled());
  await p.reload();assert(await finished.isDisabled());await p.evaluate(()=>begin('practice'));assert.equal(await p.locator('.play-card').count(),0);
  // Move recorded completions to yesterday: the daily allowance resets, cumulative stars remain.
  await p.evaluate(key=>{const d=JSON.parse(localStorage.getItem(key));for(const log of d.users['1-1'].log)log.date=new Date(Date.now()-86400000).toISOString();localStorage.setItem(key,JSON.stringify(d));},key);await p.reload();
- await p.getByRole('button',{name:'れんしゅうを はじめる',exact:true}).click();p.once('dialog',d=>d.accept());await p.getByRole('button',{name:'やめる',exact:true}).click();assert.equal((await state()).users['1-1'].log.length,6);
+ await p.getByRole('button',{name:'しゅぎょうを はじめる',exact:true}).click();p.once('dialog',d=>d.accept());await p.getByRole('button',{name:'やめる',exact:true}).click();assert.equal((await state()).users['1-1'].log.length,6);
  // A second profile sees neither the first child's selected kanji, stars, nor cards.
  await p.getByRole('button',{name:'とうろく きりかえ'}).click();await login(1,2);assert.equal(await p.locator('.kanji[aria-pressed="true"]').count(),0);
  await p.getByRole('button',{name:'📖 ずかん'}).click();assert.equal(await p.locator('#collection-count').textContent(),'0');
