@@ -10,3 +10,7 @@
 
 .question ruby, .remember-word ruby { ruby-align: center; }
 .question rt, .remember-word rt { font-size: .42em; font-weight: 700; }
+
+/* Keep selection labels intact, including tablet text scaling. */
+.buttons { max-width: 100%; }
+.buttons > button { flex: 0 0 auto; white-space: nowrap; min-height: 48px; }
