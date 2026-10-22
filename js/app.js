@@ -5,6 +5,16 @@
   let QUESTIONS = [], KANJI = [], data = { users: {}, active: "" };
   let screen = "home", game = null, review = null, feedback = null, timer = null, warning = "", saving = false;
   const esc = x => String(x).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // 表示用の補助読み。CSVの語彙・正答・選択肢は変更しない。
+  const supportingReadings = { 曜: "よう", 葉: "は", 声: "ごえ", 頭: "とう", 長: "ちょう", 紙: "し", 国: "ごく", 才: "さい", 色: "いろ", 作: "さく", 数: "すう", 門: "もん", 道: "みち", 地: "ち", 毎: "まい", 記: "き", 光: "こう", 電: "でん", 元: "げん", 毛: "け", 鳥: "ちょう", 夏: "なつ", 魚: "ぎょ", 心: "しん", 来: "らい", 原: "げん", 方: "がた", 朝: "ちょう", 遠: "えん", 体: "たい" };
+  function questionWord(q) {
+    return Array.from(q.w, char => {
+      let reading = supportingReadings[char];
+      if (q.id === 100 && char === "紙") reading = "がみ";
+      if (q.id === 373 && char === "道") reading = "どう";
+      return reading ? `<ruby>${esc(char)}<rp>（</rp><rt>${reading}</rt><rp>）</rp></ruby>` : esc(char);
+    }).join("");
+  }
   const shuffle = window.KanjiQuestions.shuffle;
   const today = () => new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
   const practiceToday = u => u.log.filter(log => log.mode === "practice" && log.date && new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(log.date)) === today()).length;
@@ -133,7 +143,7 @@
     if (screen === "play" || screen === "review") {
       const isReview = screen === "review", q = isReview ? review.items[review.idx] : game.items[game.idx];
       const num = isReview ? review.idx + 1 : game.idx + 1, max = isReview ? review.items.length : game.items.length;
-      html += `<section class="card play-card" data-question-id="${q.id}"><div class="question-toolbar"><strong>${isReview ? "ふくしゅう " + review.round + "かいめ" : game.mode === "homework" ? "しゅくだい" : "れんしゅう"} ${num} / ${max}</strong>${b("やめる", isReview ? "nav('result')" : "quit()", "small secondary")}</div><div class="progress" role="progressbar" aria-label="こたえた もんだい" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${num - 1}"><div style="width:${(num - 1) / max * 100}%"></div></div><div class="question">${esc(q.w)}</div><div class="feedback ${feedback ? feedback.ok ? "good" : "bad" : ""}" role="status" aria-live="polite">${feedback ? feedback.ok ? "○ せいかい！" : "× たしかめよう" : ""}</div>${feedback ? `<div class="reading-reinforcement"><div class="remember-word">${esc(q.w)}</div><div class="remember-reading">${esc(q.r)}</div></div>` : `<p class="muted">ただしい よみかたを えらぼう！</p>`}<div class="choices">${q.opts.map((option, i) => `<button type="button" ${feedback ? "disabled" : ""} class="choice ${feedback ? option === q.r ? "correct" : i === feedback.choice ? "wrong" : "" : ""}" onclick="${isReview ? "reviewAnswer" : "answer"}(${i})">${esc(option)}</button>`).join("")}</div></section>`;
+      html += `<section class="card play-card" data-question-id="${q.id}"><div class="question-toolbar"><strong>${isReview ? "ふくしゅう " + review.round + "かいめ" : game.mode === "homework" ? "しゅくだい" : "れんしゅう"} ${num} / ${max}</strong>${b("やめる", isReview ? "nav('result')" : "quit()", "small secondary")}</div><div class="progress" role="progressbar" aria-label="こたえた もんだい" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${num - 1}"><div style="width:${(num - 1) / max * 100}%"></div></div><div class="question">${questionWord(q)}</div><div class="feedback ${feedback ? feedback.ok ? "good" : "bad" : ""}" role="status" aria-live="polite">${feedback ? feedback.ok ? "○ せいかい！" : "× たしかめよう" : ""}</div>${feedback ? `<div class="reading-reinforcement"><div class="remember-word">${questionWord(q)}</div><div class="remember-reading">${esc(q.r)}</div></div>` : `<p class="muted">ただしい よみかたを えらぼう！</p>`}<div class="choices">${q.opts.map((option, i) => `<button type="button" ${feedback ? "disabled" : ""} class="choice ${feedback ? option === q.r ? "correct" : i === feedback.choice ? "wrong" : "" : ""}" onclick="${isReview ? "reviewAnswer" : "answer"}(${i})">${esc(option)}</button>`).join("")}</div></section>`;
     }
     if (screen === "result") {
       const score = game.answers.filter(a => a.ok).length, missed = game.items.length - score;
