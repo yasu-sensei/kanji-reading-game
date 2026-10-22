@@ -8,6 +8,9 @@
 .remember-reading { color: #124db0; font-size: clamp(36px, 6vw, 54px); font-weight: 800; }
 .play-card:has(.reading-reinforcement) > .question { display: none; }
 
+.question ruby, .remember-word ruby { ruby-align: center; }
+.question rt, .remember-word rt { font-size: .42em; font-weight: 700; }
+
 /* Keep selection labels intact, including tablet text scaling. */
 .buttons { max-width: 100%; }
 .buttons > button { flex: 0 0 auto; white-space: nowrap; min-height: 48px; }
