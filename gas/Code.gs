@@ -1,5 +1,5 @@
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Game')
-    .setTitle('かんじの よみかた☆マスター')
+    .setTitle('かん字ファンタジア')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }

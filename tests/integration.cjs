@@ -13,7 +13,7 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  async function state(){return p.evaluate(key=>JSON.parse(localStorage.getItem(key)),key)}
  async function login(cls,num){await p.waitForFunction(()=>document.querySelector('#cls')||document.querySelector('.title-start'));if(await p.locator('.title-start').count())await p.locator('.title-start').click();await p.locator('#cls').selectOption(String(cls));await p.locator('#num').selectOption(String(num));await p.getByRole('button',{name:'はじめる',exact:true}).click();await p.locator('.kanji').first().waitFor();}
  async function answerSet(mode,correctCount=10){
-  await p.getByRole('button',{name:mode==='homework'?'ちょうせんを はじめる':'しゅぎょうを はじめる',exact:true}).click();
+  await p.getByRole('button',{name:mode==='homework'?'ちょうせんを はじめる':mode==='practice'?'しゅぎょうを はじめる':'むげんれんしゅうを はじめる',exact:true}).click();
   const total=mode==='homework'?20:10;
   for(let n=0;n<total;n++){
    await p.waitForFunction(({n,total})=>document.querySelector('.question-toolbar strong')?.textContent.trim().endsWith(`${n+1} / ${total}`),{n,total});
@@ -61,6 +61,10 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  }
  assert.equal((await state()).users['1-1'].stars,stars);assert.equal((await state()).users['1-1'].log.length,logs);
  await p.getByRole('heading',{name:'ふくしゅう おしまい！'}).waitFor();
+ // Unlimited mode remains available beyond five sets after training's daily cap, without stars.
+ await p.evaluate(()=>nav('select'));const unlimitedBefore=(await state()).users['1-1'];
+ for(let n=0;n<6;n++){await answerSet('free',10);assert((await p.locator('.card.stack').innerText()).includes('☆は ふえないよ'));await p.getByRole('button',{name:'かんじを えらぶ がめんへ',exact:true}).click();}
+ const unlimitedAfter=(await state()).users['1-1'];assert.equal(unlimitedAfter.stars,unlimitedBefore.stars);assert.equal(unlimitedAfter.practice,unlimitedBefore.practice);assert.equal(unlimitedAfter.lastHomework,unlimitedBefore.lastHomework);assert.equal(unlimitedAfter.log.length,unlimitedBefore.log.length+6);
  // A failing write never consumes a star or grants a card.
  await p.goto('http://127.0.0.1:8000/gacha.html');const before=await state();
  await p.evaluate(()=>{Storage.prototype.setItem=()=>{throw new DOMException('Full','QuotaExceededError')}});

@@ -19,6 +19,7 @@ with tempfile.TemporaryDirectory() as temp:
     (args.output / 'Game.txt').write_text(html)
 for name in ['Code.gs', 'README.md']:
     (args.output / name).write_text((ROOT / 'gas' / name).read_text())
+(args.output / 'Code.txt').write_text((ROOT / 'gas/Code.gs').read_text())
 with zipfile.ZipFile(args.output / 'kanji-gas.zip', 'w', zipfile.ZIP_DEFLATED) as z:
     for name in ['Game.html', 'Code.gs', 'README.md']:
         z.write(args.output / name, name)

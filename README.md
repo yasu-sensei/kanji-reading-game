@@ -1,4 +1,4 @@
-# 漢字読み方ゲーム
+# かん字ファンタジア
 
 提供された `kanji_reading_game_prototype_v04-2.html` を土台に、400問CSVと完成済みガチャ・図鑑を統合したChromebook向けゲームです。
 
@@ -69,3 +69,5 @@ python3 scripts/build-preview.py /tmp/kanji-preview
 `python3 scripts/build-gas.py /tmp/kanji-gas` でGAS配信用ZIPを生成します。[配信手順](gas/README.md)に従い、Google Apps ScriptにCode.gsとGame.htmlを配置してウェブアプリとしてデプロイしてください。
 
 しゅぎょう完了ごとに白☆1、白☆5で金☆1へ自動交換します。既存の累計完了数をそのまま白☆として表示します。
+
+むげんれんしゅうモード: 10問1セット、日次制限なし、金☆・白☆の獲得なし。学習履歴と復習は通常どおり利用します。
