@@ -29,7 +29,7 @@
     catch (error) { warning = "ほぞんできませんでした。星やカードは かえていません。 " + (error.name === "Error" ? error.message : "端末の ほぞんせっていを おとなの方に たしかめてもらってね。"); return false; }
     finally { saving = false; }
   }
-  function showLogin() { loginVisible = true; render(); document.getElementById("cls").focus(); }
+  function showLogin() { loginVisible = true; render(); document.getElementById("cls")?.focus(); }
   async function startLogin() {
     const cls = document.getElementById("cls").value, num = document.getElementById("num").value;
     const id = cls + "-" + num;
@@ -132,8 +132,8 @@
   function nav(to) { cancelTimer(); feedback = review = null; if (to !== "result") game = null; screen = to; warning = ""; render(); }
   function goRewards(page) { cancelTimer(); location.href = page + ".html"; }
   function render() {
-    document.body.classList.toggle("title-mode", !data.active && !loginVisible);
-    if (!data.active && !loginVisible) {
+    document.body.classList.toggle("title-mode", !loginVisible);
+    if (!loginVisible) {
       app.innerHTML = `<section class="title-screen" aria-label="かん字 ファンタジア"><div class="title-art"><img src="images/login-fantasia.jpg" alt="かん字 ファンタジア。月明かりの魔法の図書館" fetchpriority="high"><button type="button" class="title-start" onclick="showLogin()" aria-label="ゲームをはじめる"><span class="visually-hidden">ゲームをはじめる</span></button></div></section>`;
       return;
     }
