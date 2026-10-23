@@ -251,6 +251,11 @@ function initApp(fetch,setTimeout,previewListen){
   }
   function nav(to) { cancelTimer(); feedback = review = null; if (to !== "result") game = null; screen = to; warning = ""; render(); }
   function goRewards(page) { cancelTimer(); location.hash = page; }
+  function repeatTrainingButton() {
+    if (game?.mode !== "practice" || !game.committed) return "";
+    if (practiceToday(user()) >= 5) return '<p class="reward-rule">きょうの しゅぎょうは 5かい おわったよ。また あした！</p>';
+    return b("もういちど しゅぎょう", "begin('practice')", "primary full");
+  }
   function render() {
     document.body.classList.toggle("title-mode", !loginVisible);
     if (!loginVisible) {
@@ -274,9 +279,9 @@ function initApp(fetch,setTimeout,previewListen){
     }
     if (screen === "result") {
       const score = game.answers.filter(a => a.ok).length, missed = game.items.length - score;
-      html += `<section class="card stack"><h2>けっか はっぴょう！</h2><div class="big">${score} / ${game.items.length}</div><div class="big star">${game.mode === "free" ? "" : game.committed && game.mode === "practice" ? '<span class="white-star">★</span>' : "★".repeat(game.awarded) || "☆"}</div><p style="text-align:center">${game.committed ? game.mode === "free" ? "きろくを ほぞんしたよ。むげんれんしゅうでは ☆は ふえないよ。" : game.mode === "practice" ? "しろ☆ 1こ もらったよ！" + (game.awarded ? " しろ☆ 5こを きん☆ 1こに かえたよ！" : " あと " + (5 - u.practice) + "こで きん☆ 1こ！") : "きろくを ほぞんしたよ。こんかいの きん☆：" + game.awarded + "こ" : "まだ ほぞんできていません。"}</p>${!game.committed ? b("もういちど ほぞんする", "retryCommit()", "primary full") : ""}${missed && game.committed && !game.reviewFinished ? b("まちがえた もんだいを ふくしゅう", "startReview()", "primary full") : ""}${b("かんじを えらぶ がめんへ", "nav('select')", "secondary full")}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')")}${b("📖 ずかん", "goRewards('collection')")}</div></section>`;
+      html += `<section class="card stack"><h2>けっか はっぴょう！</h2><div class="big">${score} / ${game.items.length}</div><div class="big star">${game.mode === "free" ? "" : game.committed && game.mode === "practice" ? '<span class="white-star">★</span>' : "★".repeat(game.awarded) || "☆"}</div><p style="text-align:center">${game.committed ? game.mode === "free" ? "きろくを ほぞんしたよ。むげんれんしゅうでは ☆は ふえないよ。" : game.mode === "practice" ? "しろ☆ 1こ もらったよ！" + (game.awarded ? " しろ☆ 5こを きん☆ 1こに かえたよ！" : " あと " + (5 - u.practice) + "こで きん☆ 1こ！") : "きろくを ほぞんしたよ。こんかいの きん☆：" + game.awarded + "こ" : "まだ ほぞんできていません。"}</p>${!game.committed ? b("もういちど ほぞんする", "retryCommit()", "primary full") : ""}${missed && game.committed && !game.reviewFinished ? b("まちがえた もんだいを ふくしゅう", "startReview()", "primary full") : ""}${repeatTrainingButton()}${b("かんじを えらぶ がめんへ", "nav('select')", "secondary full")}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')")}${b("📖 ずかん", "goRewards('collection')")}</div></section>`;
     }
-    if (screen === "reviewDone") html += `<section class="card stack"><h2>ふくしゅう おしまい！</h2><p>がんばったね！ つぎも ちょうせんしよう。</p>${b("じゅんびがめんへ", "nav('select')", "primary full")}</section>`;
+    if (screen === "reviewDone") html += `<section class="card stack"><h2>ふくしゅう おしまい！</h2><p>がんばったね！ つぎも ちょうせんしよう。</p>${repeatTrainingButton()}${b("じゅんびがめんへ", "nav('select')", "primary full")}</section>`;
     html += `<p class="foot">400問の提供CSVを使用｜学級・番号別の端末内保存｜別端末への同期は未連携</p>`;
     app.innerHTML = html;
   }
