@@ -28,6 +28,7 @@ def build(output, embed_images=True):
         styles[screen] = (ROOT / "css" / css).read_text()
     rewards = (ROOT / "js/rewards.js").read_text().replace('window.addEventListener("storage",', 'previewListen("storage",')
     app = (ROOT / "js/app.js").read_text().replace('window.addEventListener("storage",', 'previewListen("storage",')
+    app = app.replace('images/login-fantasia.jpg', 'data:image/jpeg;base64,' + base64.b64encode((ROOT / "images/login-fantasia.jpg").read_bytes()).decode())
     app = app.replace('location.href = page + ".html";', 'location.hash = page;')
     html = '''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>かんじの よみかた☆マスター</title><style id="screen-style"></style></head><body><script>
 '''
