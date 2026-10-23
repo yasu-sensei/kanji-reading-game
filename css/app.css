@@ -26,3 +26,13 @@
 .gold-star { color: #936600; }
 .white-star { color: #fff; -webkit-text-stroke: 1px #60708a; text-shadow: 0 1px 2px #60708a; }
 .reward-rule { background: #f1f6ff; padding: 12px; border-radius: 12px; line-height: 1.8; margin: 0; }
+
+body.title-mode { background: #111525; }
+body.title-mode main { max-width: none; margin: 0; padding: 0; }
+.title-screen { min-height: 100svh; display: grid; place-items: center; }
+.title-art { width: min(100%, calc(100svh * 16 / 9)); position: relative; aspect-ratio: 16 / 9; }
+.title-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.title-start { position: absolute; left: 32%; top: 72%; width: 36%; height: 16%; min-height: 48px; padding: 0; background: transparent; border: 0; border-radius: 999px; }
+.title-start:hover { box-shadow: 0 0 24px #ffe49c; }
+.title-start:focus-visible { outline: 4px solid #fff3ba; outline-offset: 2px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

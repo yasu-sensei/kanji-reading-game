@@ -3,6 +3,7 @@
   const store = window.GameStore;
   const app = document.getElementById("app");
   let QUESTIONS = [], KANJI = [], data = { users: {}, active: "" };
+  let loginVisible = false;
   let screen = "home", game = null, review = null, feedback = null, timer = null, warning = "", saving = false;
   const esc = x => String(x).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   function questionWord(q) {
@@ -28,6 +29,7 @@
     catch (error) { warning = "ほぞんできませんでした。星やカードは かえていません。 " + (error.name === "Error" ? error.message : "端末の ほぞんせっていを おとなの方に たしかめてもらってね。"); return false; }
     finally { saving = false; }
   }
+  function showLogin() { loginVisible = true; render(); document.getElementById("cls").focus(); }
   async function startLogin() {
     const cls = document.getElementById("cls").value, num = document.getElementById("num").value;
     const id = cls + "-" + num;
@@ -37,7 +39,7 @@
   }
   async function changeUser() {
     if (game && !game.committed && !confirm("とちゅうの もんだいは きろくされません。もどりますか？")) return;
-    if (await update(next => { next.active = ""; })) { cancelTimer(); game = review = feedback = null; screen = "home"; }
+    if (await update(next => { next.active = ""; })) { cancelTimer(); game = review = feedback = null; screen = "home"; loginVisible = false; }
     render();
   }
   async function toggle(k) {
@@ -130,6 +132,11 @@
   function nav(to) { cancelTimer(); feedback = review = null; if (to !== "result") game = null; screen = to; warning = ""; render(); }
   function goRewards(page) { cancelTimer(); location.href = page + ".html"; }
   function render() {
+    document.body.classList.toggle("title-mode", !data.active && !loginVisible);
+    if (!data.active && !loginVisible) {
+      app.innerHTML = `<section class="title-screen" aria-label="かん字 ファンタジア"><div class="title-art"><img src="images/login-fantasia.jpg" alt="かん字 ファンタジア。月明かりの魔法の図書館" fetchpriority="high"><button type="button" class="title-start" onclick="showLogin()" aria-label="ゲームをはじめる"><span class="visually-hidden">ゲームをはじめる</span></button></div></section>`;
+      return;
+    }
     let html = `<h1>🌸 かんじの よみかた☆マスター</h1>`;
     if (warning) html += `<div class="notice" role="alert">${esc(warning)}</div>`;
     if (!data.active) {
@@ -160,7 +167,7 @@
       KANJI = [...new Set(QUESTIONS.map(q => q.k))]; data = store.read(); render();
     } catch { app.innerHTML = `<section class="card"><h1>じゅんびを たしかめよう</h1><p>もんだい または きろくを よみこめませんでした。おとなの方に しらせてね。きろくは けしていません。</p><button type="button" onclick="location.reload()">もういちど よみこむ</button></section>`; }
   }
-  Object.assign(window, { startLogin, changeUser, toggle, selectAll, begin, answer, retryCommit, quit, startReview, reviewAnswer, nav, goRewards });
+  Object.assign(window, { showLogin, startLogin, changeUser, toggle, selectAll, begin, answer, retryCommit, quit, startReview, reviewAnswer, nav, goRewards });
   window.addEventListener("storage", event => { if (event.key !== store.key && event.key !== null) return; try { const next = store.read(); if (next.active !== data.active) { cancelTimer(); game = review = feedback = null; screen = "home"; } data = next; render(); } catch { warning = "きろくの へんこうを よみこめません。"; render(); } });
   initialize();
 })();

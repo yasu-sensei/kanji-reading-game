@@ -11,7 +11,7 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  await ctx.addInitScript(()=>{const native=window.setTimeout;window.setTimeout=(fn,ms,...args)=>native(fn,ms>500?40:ms,...args);crypto.getRandomValues=a=>{a.fill(0);return a;};});
  const p=await ctx.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));
  async function state(){return p.evaluate(key=>JSON.parse(localStorage.getItem(key)),key)}
- async function login(cls,num){await p.locator('#cls').selectOption(String(cls));await p.locator('#num').selectOption(String(num));await p.getByRole('button',{name:'はじめる',exact:true}).click();await p.locator('.kanji').first().waitFor();}
+ async function login(cls,num){await p.waitForFunction(()=>document.querySelector('#cls')||document.querySelector('.title-start'));if(await p.locator('.title-start').count())await p.locator('.title-start').click();await p.locator('#cls').selectOption(String(cls));await p.locator('#num').selectOption(String(num));await p.getByRole('button',{name:'はじめる',exact:true}).click();await p.locator('.kanji').first().waitFor();}
  async function answerSet(mode,correctCount=10){
   await p.getByRole('button',{name:mode==='homework'?'ちょうせんを はじめる':'しゅぎょうを はじめる',exact:true}).click();
   const total=mode==='homework'?20:10;

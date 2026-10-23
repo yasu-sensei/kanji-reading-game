@@ -23,7 +23,7 @@ assert(renderEnv.format({id:13,w:'小石'}).includes('<rt>いし</rt>'));
  try {
  const p=await browser.newPage();
  await p.route('**/js/app.js*',route=>route.fulfill({contentType:'application/javascript',body:fs.readFileSync('js/app.js','utf8').replace('items: poolQuestions(mode === "homework" ? 20 : 10)', 'items: Array(10).fill({id:13,w:"小石",r:"こいし",opts:["こいし","しょうせき","おいし"]})')}));
- await p.goto('http://127.0.0.1:8000/');await p.waitForSelector('#cls');
+ await p.goto('http://127.0.0.1:8000/');await p.waitForFunction(()=>document.querySelector('#cls')||document.querySelector('.title-start'));if(await p.getByRole('button',{name:'ゲームをはじめる',exact:true}).count()) await p.getByRole('button',{name:'ゲームをはじめる',exact:true}).click();await p.waitForSelector('#cls');
  await p.evaluate(()=>{const u=GameStore.freshProfile();u.selected=['小'];localStorage.setItem(GameStore.key,JSON.stringify({active:'1-1',users:{'1-1':u}}))});await p.reload();await p.waitForSelector('.kanji');await p.evaluate(()=>begin('practice'));
  assert.equal(await p.locator('.question ruby').count(),1);assert.equal(await p.locator('.question rt').textContent(),'いし');
  await p.evaluate(()=>answer(0));assert.equal(await p.locator('.question rt').textContent(),'いし');
