@@ -46,14 +46,14 @@ const byId=new Map(questions.map(q=>[q.id,q]));const key='kanji-reading-prototyp
  await p.reload();assert(await finished.isDisabled());await p.evaluate(()=>begin('practice'));assert.equal(await p.locator('.play-card').count(),0);
  // Move recorded completions to yesterday: the daily allowance resets, cumulative stars remain.
  await p.evaluate(key=>{const d=JSON.parse(localStorage.getItem(key));for(const log of d.users['1-1'].log)log.date=new Date(Date.now()-86400000).toISOString();localStorage.setItem(key,JSON.stringify(d));},key);await p.reload();
- await p.getByRole('button',{name:'しゅぎょうを はじめる',exact:true}).click();p.once('dialog',d=>d.accept());await p.getByRole('button',{name:'やめる',exact:true}).click();assert.equal((await state()).users['1-1'].log.length,6);
+ await p.getByRole('button',{name:'しゅぎょうを はじめる',exact:true}).click();p.once('dialog',d=>d.accept());await p.getByRole('button',{name:'やめる',exact:true}).click();assert.equal((await state()).users['1-1'].log.length,7);assert.equal((await state()).users['1-1'].log.at(-1).aborted,true);assert.equal((await state()).users['1-1'].log.at(-1).award,0);assert.equal((await state()).users['1-1'].practice,0);
  // A second profile sees neither the first child's selected kanji, stars, nor cards.
  await p.getByRole('button',{name:'とうろく きりかえ'}).click();await login(1,2);assert.equal(await p.locator('.kanji[aria-pressed="true"]').count(),0);
  await p.getByRole('button',{name:'📖 ずかん'}).click();assert.equal(await p.locator('#collection-count').textContent(),'0');
  await p.goto('http://127.0.0.1:8000/gacha.html');assert.equal(await p.locator('#star-count').textContent(),'4');assert(!(await p.locator('#draw-card').isDisabled()));
  await p.goto('http://127.0.0.1:8000/');await p.getByRole('button',{name:'とうろく きりかえ'}).click();await login(1,1);assert.equal(await p.locator('.kanji[aria-pressed="true"]').count(),1);
  // Review never grants extra stars, and stops after at most two rounds.
- await answerSet('practice',8);assert((await p.locator('.card.stack').innerText()).includes('しろ☆ なし'));assert.equal((await state()).users['1-1'].practice,0);assert.equal((await state()).users['1-1'].log.filter(x=>x.mode==='practice').length,6);const stars=(await state()).users['1-1'].stars;const logs=(await state()).users['1-1'].log.length;
+ await answerSet('practice',8);assert((await p.locator('.card.stack').innerText()).includes('しろ☆ なし'));assert.equal((await state()).users['1-1'].practice,0);assert.equal((await state()).users['1-1'].log.filter(x=>x.mode==='practice').length,7);const stars=(await state()).users['1-1'].stars;const logs=(await state()).users['1-1'].log.length;
  await p.getByRole('button',{name:'まちがえた もんだいを ふくしゅう'}).click();let reviews=0;
  while(await p.locator('.play-card').count()){
   const id=Number(await p.locator('.play-card').getAttribute('data-question-id'));const q=byId.get(id);
