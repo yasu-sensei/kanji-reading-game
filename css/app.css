@@ -64,3 +64,5 @@ body.title-mode main { max-width: none; margin: 0; padding: 0; }
 .kana-play .kana-keyboard{gap:2px}
 .kana-play .kana-row{gap:4px}
 }
+
+.teacher-test-panel{margin-top:14px;padding:15px;border:2px dashed #4476bc;border-radius:15px;background:#f0f7ff}.teacher-test-panel h3{margin:0 0 8px}.teacher-test-panel p{margin:0 0 12px}
