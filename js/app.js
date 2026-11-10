@@ -11,7 +11,8 @@
   function questionWord(q) {
     const selected = new Set(user()?.selected || []);
     const parts = window.WORD_READINGS[String(q.id)];
-    if (!parts) return esc(q.w);
+    // CSVの語彙が更新されても、古い読み補助データで問題文を上書きしない。
+    if (!parts || parts.map(([text]) => text).join("") !== q.w) return esc(q.w);
     return parts.map(([text, reading]) => {
       // 熟字訓など語全体の読みは補助表示しない。
       const needsReading = reading && Array.from(text).length === 1 && !selected.has(text);
