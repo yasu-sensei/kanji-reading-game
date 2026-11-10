@@ -106,7 +106,25 @@
     timer = setTimeout(() => { if (screen !== "play" || game !== current) return; feedback = null; game.idx++; if (game.idx >= game.items.length) screen = "result"; render(); }, ok ? 1500 : 2000);
   }
   async function retryCommit() { if (await commitGame()) warning = ""; render(); }
-  function quit() { if (game?.committed) { nav("result"); return; } if (!confirm("とちゅうで やめる？ さいごまで おわっていないと きろくは のこらないよ。")) return; cancelTimer(); game = review = feedback = null; screen = "select"; render(); }
+  async function quit() {
+    if (game?.committed) { nav("result"); return; }
+    if (!game) return;
+    const current = game;
+    const isPractice = current.mode === "practice";
+    if (!confirm(isPractice ? "とちゅうで やめる？ しろ☆は もらえないけれど、きょうの 5かいの うち 1かいに かぞえるよ。" : "とちゅうで やめる？ さいごまで おわっていないと きろくは のこらないよ。")) return;
+    cancelTimer();
+    if (isPractice) {
+      const ok = await update(next => {
+        const u = store.profile(next, current.profile);
+        if (u.log.some(log => log.id === current.id)) return;
+        if (practiceToday(u) >= 5) throw new Error("きょうの しゅぎょうは 5かい おわっています。");
+        u.log.push({ id: current.id, date: new Date().toISOString(), mode: "practice", score: null, award: 0, aborted: true });
+      });
+      if (!ok) { render(); return; }
+    }
+    if (game !== current) return;
+    game = review = feedback = null; screen = "select"; render();
+  }
   function startReview() {
     if (!game?.committed) return;
     const missed = game.items.filter((q, i) => !game.answers[i].ok);
@@ -151,7 +169,7 @@
     const u = user();
     html += `<div class="row user-header"><span class="badge">${esc(data.active.replace("-", "くみ "))}ばん</span><span class="badge" id="learning-stars"><span class="gold-star" aria-hidden="true">★</span> きん☆ ${u.stars}こ</span><span class="badge" id="white-stars"><span class="white-star" aria-hidden="true">★</span> しろ☆ ${u.practice}こ</span>${b("とうろく きりかえ", "changeUser()", "small secondary")}</div>`;
     if (screen === "home") screen = "select";
-    if (screen === "select") html += `<section class="card"><h2>① ならった かんじを えらぼう！</h2><p class="muted">タッチで えらぶ・もういちどで はずす</p><div class="row"><span class="badge">${u.selected.length} / 80じ</span><div class="buttons">${b("ぜんぶ えらぶ", "selectAll(true)", "small secondary")}${b("ぜんぶ はずす", "selectAll(false)", "small secondary")}</div></div><div class="grid">${KANJI.map(k => `<button type="button" class="kanji ${u.selected.includes(k) ? "on" : ""}" aria-label="${k}" aria-pressed="${u.selected.includes(k)}" onclick="toggle('${k}')" ${saving ? "disabled" : ""}>${k}</button>`).join("")}</div><p class="muted">えらんだ かんじの ことば：${available().length}もん</p></section><section class="card stack"><h2>② モードを えらぼう！</h2><p>🏠 ちょうせんモード：1にち 1かい（20もん）</p><p class="reward-rule">20もん ぜんぶ せいかいで きん☆ 2こ！<br>10〜19もん せいかいで きん☆ 1こ。</p><button type="button" class="primary full" onclick="begin('homework')" ${u.lastHomework === today() || saving ? "disabled" : ""}>${u.lastHomework === today() ? "✓ きょうの ちょうせんは おわったよ" : "ちょうせんを はじめる"}</button><p>✏️ しゅぎょうモード：1にち 5かいまで（1かい 10もん）（きょう あと ${Math.max(0, 5 - practiceToday(u))}かい）</p><p class="reward-rule">10もんの うち はじめの こたえで 9もん いじょう せいかいすると しろ☆ 1こ！<br>8もん いかでも 1にち 5かいの うち 1かいに かぞえるよ。<br>しろ☆ 5こで きん☆ 1こに なるよ。</p><p>いま しろ☆ ${u.practice}こ。あと ${5 - u.practice}こで きん☆ 1こ！</p><button type="button" class="full secondary" onclick="begin('practice')" ${practiceToday(u) >= 5 || saving ? "disabled" : ""}>${practiceToday(u) >= 5 ? "✓ きょうの しゅぎょうは おわったよ" : "しゅぎょうを はじめる"}</button><p>📚 むげんれんしゅうモード：1セット 10もん</p><p class="reward-rule">1にち なんかいでも できるよ。<br>きん☆・しろ☆は もらえないよ。</p>${b("むげんれんしゅうを はじめる", "begin('free')", "full secondary")}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')", "full")}${b("📖 ずかん", "goRewards('collection')", "full")}</div></section>`;
+    if (screen === "select") html += `<section class="card"><h2>① ならった かんじを えらぼう！</h2><p class="muted">タッチで えらぶ・もういちどで はずす</p><div class="row"><span class="badge">${u.selected.length} / 80じ</span><div class="buttons">${b("ぜんぶ えらぶ", "selectAll(true)", "small secondary")}${b("ぜんぶ はずす", "selectAll(false)", "small secondary")}</div></div><div class="grid">${KANJI.map(k => `<button type="button" class="kanji ${u.selected.includes(k) ? "on" : ""}" aria-label="${k}" aria-pressed="${u.selected.includes(k)}" onclick="toggle('${k}')" ${saving ? "disabled" : ""}>${k}</button>`).join("")}</div><p class="muted">えらんだ かんじの ことば：${available().length}もん</p></section><section class="card stack"><h2>② モードを えらぼう！</h2><p>🏠 ちょうせんモード：1にち 1かい（20もん）</p><p class="reward-rule">20もん ぜんぶ せいかいで きん☆ 2こ！<br>10〜19もん せいかいで きん☆ 1こ。</p><button type="button" class="primary full" onclick="begin('homework')" ${u.lastHomework === today() || saving ? "disabled" : ""}>${u.lastHomework === today() ? "✓ きょうの ちょうせんは おわったよ" : "ちょうせんを はじめる"}</button><p>✏️ しゅぎょうモード：1にち 5かいまで（1かい 10もん・とちゅうで やめても 1かい）（きょう あと ${Math.max(0, 5 - practiceToday(u))}かい）</p><p class="reward-rule">10もんの うち はじめの こたえで 9もん いじょう せいかいすると しろ☆ 1こ！<br>8もん いかでも、とちゅうで やめても 1にち 5かいの うち 1かいに かぞえるよ。<br>しろ☆ 5こで きん☆ 1こに なるよ。</p><p>いま しろ☆ ${u.practice}こ。あと ${5 - u.practice}こで きん☆ 1こ！</p><button type="button" class="full secondary" onclick="begin('practice')" ${practiceToday(u) >= 5 || saving ? "disabled" : ""}>${practiceToday(u) >= 5 ? "✓ きょうの しゅぎょうは おわったよ" : "しゅぎょうを はじめる"}</button><p>📚 むげんれんしゅうモード：1セット 10もん</p><p class="reward-rule">1にち なんかいでも できるよ。<br>きん☆・しろ☆は もらえないよ。</p>${b("むげんれんしゅうを はじめる", "begin('free')", "full secondary")}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')", "full")}${b("📖 ずかん", "goRewards('collection')", "full")}</div></section>`;
     if (screen === "play" || screen === "review") {
       const isReview = screen === "review", q = isReview ? review.items[review.idx] : game.items[game.idx];
       const num = isReview ? review.idx + 1 : game.idx + 1, max = isReview ? review.items.length : game.items.length;
