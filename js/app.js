@@ -251,7 +251,7 @@
   }
   async function initialize() {
     try {
-      const response = await fetch("data/kanji_400_final.csv?v=20261111-sync-v43", { cache: "no-store" }); if (!response.ok) throw new Error("問題をよみこめません。");
+      const response = await fetch("data/kanji_400_final.csv?v=20261111-sync-v44", { cache: "no-store" }); if (!response.ok) throw new Error("問題をよみこめません。");
       QUESTIONS = window.KanjiQuestions.parseQuestions(await response.text()).map(q => ({ id: q.id, k: q.target, w: q.word, r: q.correct, wrong: q.choices.slice(1) }));
       KANJI = [...new Set(QUESTIONS.map(q => q.k))]; data = store.read(); render();
     } catch { app.innerHTML = `<section class="card"><h1>じゅんびを たしかめよう</h1><p>もんだい または きろくを よみこめませんでした。おとなの方に しらせてね。きろくは けしていません。</p><button type="button" onclick="location.reload()">もういちど よみこむ</button></section>`; }
