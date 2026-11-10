@@ -74,3 +74,36 @@ body.title-mode main { max-width: none; margin: 0; padding: 0; }
 .kana-columns .kana-spacer{min-height:36px}
 .kana-play .reading-prompt{font-size:clamp(16px,2vw,22px);font-weight:700}
 @media(max-height:760px) and (min-width:700px){.kana-columns .kana-key{min-height:clamp(32px,5vh,42px)}.kana-columns .kana-spacer{min-height:32px}}
+
+/* v4.1: 横向きタブレット・PCの50音入力画面をスクロールなしに収める */
+@media (min-width:701px) and (max-height:900px){
+  body:has(.kana-play){height:100dvh;overflow:hidden}
+  body:has(.kana-play) main{height:100dvh;max-height:100dvh;display:flex;flex-direction:column;padding:5px 12px 4px;overflow:hidden}
+  body:has(.kana-play) main>h1{font-size:20px;line-height:1.15;margin:1px 0 3px;flex:none}
+  body:has(.kana-play) .user-header{padding:2px 0 4px;flex:none;font-size:14px;min-height:36px}
+  body:has(.kana-play) .user-header .badge{padding:3px 8px}
+  body:has(.kana-play) .user-header .small{min-height:30px;padding:2px 8px;font-size:13px}
+  body:has(.kana-play) .foot{display:none}
+  body:has(.kana-play) .kana-play.card{flex:1;min-height:0;margin:2px 0 0;padding:7px 12px;border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+  .kana-play .question-toolbar{min-height:30px;font-size:15px}
+  .kana-play .question-toolbar .small{min-height:28px;padding:1px 9px;font-size:13px}
+  .kana-play .progress{height:7px;flex:none;margin:3px 0}
+  .kana-play .answer-display{flex:none}
+  .kana-play .answer-display .feedback{min-height:24px;margin:0;font-size:18px;line-height:24px}
+  .kana-play .answer-display .question{font-size:clamp(26px,4vh,36px);line-height:1.1;padding:0 6px}
+  .kana-play .reading-slot{padding:0 6px 3px;min-height:26px}
+  .kana-play .remember-reading{font-size:23px;line-height:1.1}
+  .kana-play .reading-prompt{font-size:15px;line-height:1.25}
+  .kana-play .choices{flex:1;min-height:0;display:flex;flex-direction:column;gap:0}
+  .kana-play .kana-answer-row{flex:none;margin:3px 0 5px;gap:7px}
+  .kana-play .kana-answer{min-height:38px;font-size:24px;padding:2px 8px}
+  .kana-play .kana-answer.empty{font-size:16px}
+  .kana-play #kana-submit{min-height:38px;padding:3px 12px;font-size:16px}
+  .kana-play .kana-keyboard{flex:1;min-height:0;display:flex;flex-direction:column;gap:4px}
+  .kana-play .kana-columns{flex:1;min-height:0;gap:4px}
+  .kana-play .kana-column{min-height:0;grid-template-rows:repeat(5,minmax(0,1fr));gap:4px}
+  .kana-play .kana-columns .kana-key{height:100%;min-height:0;padding:0 1px;font-size:clamp(18px,3.4vh,25px);border-radius:8px}
+  .kana-play .kana-columns .kana-spacer{min-height:0}
+  .kana-play .kana-tools{flex:none;margin:0;gap:4px}
+  .kana-play .kana-tools .kana-key{min-height:35px;padding:2px;font-size:clamp(12px,2vh,16px);border-radius:8px}
+}
