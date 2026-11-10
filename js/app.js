@@ -38,7 +38,20 @@
     render();
   }
   async function changeUser() {
-    if (game && !game.committed && !confirm("とちゅうの もんだいは きろくされません。もどりますか？")) return;
+    if (game && !game.committed) {
+      if (!confirm(game.mode === "practice" ? "とちゅうで やめる？ しゅぎょうは 1かいに かぞえるよ。" : "とちゅうの もんだいは きろくされません。もどりますか？")) return;
+      const current = game;
+      if (current.mode === "practice") {
+        const ok = await update(next => {
+          const u = store.profile(next, current.profile);
+          if (!u.log.some(log => log.id === current.id)) {
+            if (practiceToday(u) >= 5) throw new Error("きょうの しゅぎょうは 5かい おわっています。");
+            u.log.push({ id: current.id, date: new Date().toISOString(), mode: "practice", score: null, award: 0, aborted: true });
+          }
+        });
+        if (!ok) { render(); return; }
+      }
+    }
     if (await update(next => { next.active = ""; })) { cancelTimer(); game = review = feedback = null; screen = "home"; loginVisible = false; }
     render();
   }
