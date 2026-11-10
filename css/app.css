@@ -66,3 +66,11 @@ body.title-mode main { max-width: none; margin: 0; padding: 0; }
 }
 
 .teacher-test-panel{margin-top:14px;padding:15px;border:2px dashed #4476bc;border-radius:15px;background:#f0f7ff}.teacher-test-panel h3{margin:0 0 8px}.teacher-test-panel p{margin:0 0 12px}
+
+/* 縦50音表：右端あ行、左端わ行。タブレット横画面で全キーを一覧表示 */
+.kana-columns{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;direction:ltr}
+.kana-column{display:grid;grid-template-rows:repeat(5,minmax(0,1fr));gap:4px;min-width:0}
+.kana-columns .kana-key{width:100%;min-height:clamp(36px,5.4vh,56px);font-size:clamp(18px,2.5vw,28px)}
+.kana-columns .kana-spacer{min-height:36px}
+.kana-play .reading-prompt{font-size:clamp(16px,2vw,22px);font-weight:700}
+@media(max-height:760px) and (min-width:700px){.kana-columns .kana-key{min-height:clamp(32px,5vh,42px)}.kana-columns .kana-spacer{min-height:32px}}
