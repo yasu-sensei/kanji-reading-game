@@ -36,3 +36,31 @@ body.title-mode main { max-width: none; margin: 0; padding: 0; }
 .title-start:hover { box-shadow: 0 0 24px #ffe49c; }
 .title-start:focus-visible { outline: 4px solid #fff3ba; outline-offset: 2px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* 50音入力式：従来の三択画面には影響させない */
+.kana-play .answer-display .question{padding:2px 8px;font-size:clamp(30px,4vw,46px)}
+.kana-play .answer-display .feedback{margin-top:2px;min-height:36px}
+.kana-play .reading-slot{padding-bottom:4px}
+.kana-play .remember-reading{font-size:clamp(25px,4vw,38px)}
+.kana-play .choices{display:block}
+.kana-answer-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:stretch;margin:4px 0 10px}
+.kana-answer{border:3px solid #9cbbe9;border-radius:13px;min-height:54px;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,4vw,34px);font-weight:800;overflow-wrap:anywhere;padding:5px 10px;text-align:center}
+.kana-answer.empty{color:#8795aa;font-size:clamp(15px,2.4vw,20px)}
+.kana-keyboard{display:grid;gap:4px}
+.kana-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.kana-keyboard .kana-key{min-width:0;min-height:44px;padding:3px 1px;border-radius:10px;font-size:clamp(18px,3vw,27px);touch-action:manipulation}
+.kana-tools{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:4px}
+.kana-tools .kana-key{font-size:clamp(12px,1.8vw,18px);background:#eaf2ff}
+.kana-spacer{min-width:0}
+.kana-play .kana-keyboard button:disabled{opacity:.4}
+@media(max-height:760px) and (min-width:700px){
+.kana-play.card{padding:10px 16px;margin:5px 0}
+.kana-play .kana-keyboard .kana-key{min-height:34px}
+.kana-play .answer-display .question{line-height:1.2}
+.kana-play .answer-display .feedback{min-height:30px;font-size:21px}
+.kana-play .reading-slot{padding-bottom:0}
+.kana-play .kana-answer{min-height:43px}
+.kana-play .kana-answer-row{margin:2px 0 5px}
+.kana-play .kana-keyboard{gap:2px}
+.kana-play .kana-row{gap:4px}
+}
