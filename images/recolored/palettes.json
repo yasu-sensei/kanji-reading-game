@@ -1,0 +1,233 @@
+[
+  {
+    "id": "001",
+    "name": "ランゾロ",
+    "image": "images/recolored/001_ランゾロ.jpg",
+    "palette": "scales vivid coral-red, underside warm ivory, spines pale apricot, lantern metal rose gold and flame honey amber",
+    "bytes": 154654
+  },
+  {
+    "id": "002",
+    "name": "ランデルコ",
+    "image": "images/recolored/002_ランデルコ.jpg",
+    "palette": "scales deep ruby red, underside ivory, crystalline spines soft peach and pink, lantern glass glowing rose-pink and warm amber, metal rose gold",
+    "bytes": 174933
+  },
+  {
+    "id": "003",
+    "name": "トウリュウ",
+    "image": "images/recolored/003_トウリュウ.jpg",
+    "palette": "scales majestic burgundy-red with coral accents, underside ivory, wing membranes translucent blush pink and champagne, spines peach crystals and rose-gold lantern frame",
+    "bytes": 183449
+  },
+  {
+    "id": "004",
+    "name": "ジュエリ",
+    "image": "images/recolored/004_ジュエリ.jpg",
+    "palette": "ivory white, dusty rose fur, emerald/mint/rose crystals with champagne highlights",
+    "bytes": 169985
+  },
+  {
+    "id": "005",
+    "name": "ギアウル",
+    "image": "images/recolored/005_ギアウル.jpg",
+    "palette": "fur rich midnight cobalt blue with silver-white chest and muzzle, lightning markings bright cyan, gears brushed silver with cyan glowing inner rims, amber eyes become ice-blue",
+    "bytes": 190443
+  },
+  {
+    "id": "006",
+    "name": "ギアルフ",
+    "image": "images/recolored/006_ギアルフ.jpg",
+    "palette": "fur deep midnight cobalt and silver-white, ninja clothing dark navy, cloth scarf ends cyan, gears brushed silver and luminous cyan, eye ice-blue; retain same ninja anatomy and weapon",
+    "bytes": 188240
+  },
+  {
+    "id": "007",
+    "name": "カサクラ",
+    "image": "images/recolored/007_カサクラ.jpg",
+    "palette": "umbrella alternating translucent lilac and blush-pink panels, droplet motifs pale mint, ivory body with lavender-pink tentacles, silver finials and turquoise eyes",
+    "bytes": 159500
+  },
+  {
+    "id": "008",
+    "name": "シロカブト",
+    "image": "images/recolored/008_シロカブト.jpg",
+    "palette": "dark plum purple armor with pale lavender-white stone castle blocks, silver trim and violet emblems, matching plum/lavender flags on its body; do not recolor background flags",
+    "bytes": 177672
+  },
+  {
+    "id": "009",
+    "name": "グランカブト",
+    "image": "images/recolored/009_グランカブト.jpg",
+    "palette": "royal plum purple armored shell and legs, pearl lavender-white stone fortress blocks, silver trim and amethyst insignias, matching plum flags on its body only",
+    "bytes": 213085
+  },
+  {
+    "id": "010",
+    "name": "モチウサ",
+    "image": "images/recolored/010_モチウサ.jpg",
+    "palette": "mochi body pale matcha-green with cream highlights, inner ears deeper mint green, cheeks soft peach, sakura body mark and ribbon pale lavender with lilac details, ribbon pompons cream",
+    "bytes": 154786
+  },
+  {
+    "id": "011",
+    "name": "トケフクロ",
+    "image": "images/recolored/011_トケフクロ.jpg",
+    "palette": "owl feathers warm chestnut and caramel brown, ivory face, golden-yellow feather tips, clock casing antique copper, deep emerald clock-hand decorations, eyes emerald",
+    "bytes": 204627
+  },
+  {
+    "id": "012",
+    "name": "クロノウル",
+    "image": "images/recolored/012_クロノウル.jpg",
+    "palette": "elder owl plumage rich chestnut brown with caramel and ivory wing layers, ivory face, antique copper clock frame, emerald clock hands and bell accents, emerald eyes",
+    "bytes": 162160
+  },
+  {
+    "id": "013",
+    "name": "カギネコ",
+    "image": "images/recolored/013_カギネコ.jpg",
+    "palette": "cat fur soft silver-gray with white muzzle belly and paws, eyes bright emerald, key tail and collar copper rose-gold, forehead keyhole copper",
+    "bytes": 137354
+  },
+  {
+    "id": "014",
+    "name": "ニャントム",
+    "image": "images/recolored/014_ニャントム.jpg",
+    "palette": "cat fur silver-gray and white, spectral lower body misty teal and pale mint, swirling magic peach-gold, key tail copper rose-gold, eyes emerald",
+    "bytes": 160514
+  },
+  {
+    "id": "015",
+    "name": "ユキカメ",
+    "image": "images/recolored/015_ユキカメ.jpg",
+    "palette": "turtle skin soft lavender with ivory underside, snowman shell snowy white with faint pink-violet shadows, scarf mint and emerald stripes, carrot nose remains warm orange",
+    "bytes": 151354
+  },
+  {
+    "id": "016",
+    "name": "イチゴバチ",
+    "image": "images/recolored/016_イチゴバチ.jpg",
+    "palette": "bee head pale pistachio green with dark brown eyes, body warm cocoa and cream, strawberry abdomen pale blush-pink with dark rose seeds, leaves rich emerald, translucent wings faint pink",
+    "bytes": 170641
+  },
+  {
+    "id": "017",
+    "name": "メンガ",
+    "image": "images/recolored/017_メンガ.jpg",
+    "palette": "moth wings deep petrol teal with pale mint and champagne mask patterns, luminous eyes amber, furry collar ivory, antennae turquoise and cream, face-mask pale champagne",
+    "bytes": 190037
+  },
+  {
+    "id": "018",
+    "name": "マジエイ",
+    "image": "images/recolored/018_マジエイ.jpg",
+    "palette": "ray body rich sapphire-blue velvet with silver and pale turquoise decorative embroidery, pale ivory underside, corner tassels pale silver, warm peach eyes and small details",
+    "bytes": 201525
+  },
+  {
+    "id": "019",
+    "name": "キカンサイ",
+    "image": "images/recolored/019_キカンサイ.jpg",
+    "palette": "rhino engine armor deep forest emerald green and gunmetal, brass fittings become warm copper, ivory-gold glowing headlights, body slate gray; preserve white steam",
+    "bytes": 206795
+  },
+  {
+    "id": "020",
+    "name": "ゴウキサイ",
+    "image": "images/recolored/020_ゴウキサイ.jpg",
+    "palette": "giant rhino engine deep forest emerald and gunmetal with warm copper pipes and fittings, ivory glowing lights, slate-gray body and horn dark gunmetal with copper bands; preserve white steam",
+    "bytes": 231288
+  },
+  {
+    "id": "021",
+    "name": "ツボタコ",
+    "image": "images/recolored/021_ツボタコ.jpg",
+    "palette": "octopus ceramic pot body glazed midnight indigo with pale turquoise wave patterns, tentacles saturated teal and mint, suction cups pale pearl-lavender, retain aged ceramic texture",
+    "bytes": 227515
+  },
+  {
+    "id": "022",
+    "name": "パレットン",
+    "image": "images/recolored/022_パレットン.jpg",
+    "palette": "chameleon body mint-green with turquoise and pale violet paint splashes, palette shell pale cool ivory, paint puddles vivid magenta cyan and lemon; brush tip matching vivid magenta/cyan/lemon stripes, pale silver ferrule",
+    "bytes": 192455
+  },
+  {
+    "id": "023",
+    "name": "ラッパタツ",
+    "image": "images/recolored/023_ラッパタツ.jpg",
+    "palette": "seahorse body lavender and purple with pale ivory belly, trumpet mouth and tubing polished rose gold, fins mint-green fading to turquoise",
+    "bytes": 202222
+  },
+  {
+    "id": "024",
+    "name": "フラミランプ",
+    "image": "images/recolored/024_フラミランプ_軽量版.jpg",
+    "palette": "flamingo body luminous icy white with lavender shadows and turquoise feather tips, neck soft pale lilac, beak lampshade turquoise and pearl-white petals with silver trim, warm yellow light stays bright",
+    "bytes": 184662
+  },
+  {
+    "id": "025",
+    "name": "マグサソリ",
+    "image": "images/recolored/025_マグサソリ.jpg",
+    "palette": "scorpion armor pearly ivory and smoky lavender, joints dark violet, one claw and magnet end emerald green, the other deep magenta, metal trim cool silver, eyes cyan; preserve electric effects",
+    "bytes": 196939
+  },
+  {
+    "id": "026",
+    "name": "タネモグラ",
+    "image": "images/recolored/026_タネモグラ.jpg",
+    "palette": "mole fur soft dark cocoa brown with cream muzzle, seed shell deep acorn chestnut with copper highlights, sprout leaves blue-green teal, claws ivory",
+    "bytes": 202359
+  },
+  {
+    "id": "027",
+    "name": "ダイコンモグ",
+    "image": "images/recolored/027_ダイコンモグ.jpg",
+    "palette": "mole fur dark cocoa and cream, opened seed shell deep chestnut copper, shoulder leaves blue-green teal, large leafy crown rich teal with mint leaf veins, claws ivory",
+    "bytes": 219131
+  },
+  {
+    "id": "028",
+    "name": "アワロトル",
+    "image": "images/recolored/028_アワロトル.jpg",
+    "palette": "axolotl body soft periwinkle lavender with cream belly, gill stems deep lilac and translucent bubble tips shifting mint pink and champagne, tail iridescent mint-lilac, cheeks peach",
+    "bytes": 209951
+  },
+  {
+    "id": "029",
+    "name": "アシザル",
+    "image": "images/recolored/029_アシザル.jpg",
+    "palette": "monkey fur light silver-gray and ivory face, samurai armor deep turquoise and gunmetal, cords purple, trim cool silver, helmet emblem pale turquoise-gold; only change the character",
+    "bytes": 208656
+  },
+  {
+    "id": "030",
+    "name": "チンムシャ",
+    "image": "images/recolored/030_チンムシャ.jpg",
+    "palette": "chimp fur charcoal-gray and ivory-tan face, armor deep turquoise with gunmetal panels, cords rich purple, trim silver, helmet horns silver and pale turquoise, emblem lavender-gold",
+    "bytes": 215330
+  },
+  {
+    "id": "031",
+    "name": "ゴリカブト",
+    "image": "images/recolored/031_ゴリカブト.jpg",
+    "palette": "gorilla fur charcoal and silver-gray, armor deep turquoise and gunmetal, cords rich purple, trim silver, helmet horns pale silver with turquoise details, helmet demon ornament dark teal and silver",
+    "bytes": 236205
+  },
+  {
+    "id": "SECRET01",
+    "name": "テンセイリュウ",
+    "image": "images/recolored/SECRET01_テンセイリュウ.jpg",
+    "palette": "dragon scales luminous pearl-white and pale aqua, mane icy turquoise and lavender-white, horns rose gold, celestial rings polished rose gold with deep emerald gemstones, star emblems pale gold",
+    "bytes": 202462
+  },
+  {
+    "id": "SECRET02",
+    "name": "ジクロノス",
+    "image": "images/recolored/SECRET02_ジクロノス.jpg",
+    "palette": "dragon scales deep royal purple and smoky amethyst, underside warm ivory, horns polished silver, armor-like accents silver, hourglass trim silver and sand glowing turquoise, eye icy blue",
+    "bytes": 216945
+  }
+]

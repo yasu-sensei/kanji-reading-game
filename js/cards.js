@@ -1,170 +1,170 @@
 "use strict";
 
-// 正式名称は提供ファイル名に従う。画像そのものは変更しない。
+// 正式名称とIDは維持し、承認済みの色替え画像を使用。
 window.REWARD_CARDS = Object.freeze([
   {
     "id": "001",
     "name": "ランゾロ",
-    "image": "images/001_ランゾロ.jpg"
+    "image": "images/recolored/001_ランゾロ.jpg"
   },
   {
     "id": "002",
     "name": "ランデルコ",
-    "image": "images/002_ランデルコ.jpg"
+    "image": "images/recolored/002_ランデルコ.jpg"
   },
   {
     "id": "003",
     "name": "トウリュウ",
-    "image": "images/003_トウリュウ.jpg"
+    "image": "images/recolored/003_トウリュウ.jpg"
   },
   {
     "id": "004",
     "name": "ジュエリ",
-    "image": "images/004_ジュエリ.jpg"
+    "image": "images/recolored/004_ジュエリ.jpg"
   },
   {
     "id": "005",
     "name": "ギアウル",
-    "image": "images/005_ギアウル.jpg"
+    "image": "images/recolored/005_ギアウル.jpg"
   },
   {
     "id": "006",
     "name": "ギアルフ",
-    "image": "images/006_ギアルフ.jpg"
+    "image": "images/recolored/006_ギアルフ.jpg"
   },
   {
     "id": "007",
     "name": "カサクラ",
-    "image": "images/007_カサクラ.jpg"
+    "image": "images/recolored/007_カサクラ.jpg"
   },
   {
     "id": "008",
     "name": "シロカブト",
-    "image": "images/008_シロカブト.jpg"
+    "image": "images/recolored/008_シロカブト.jpg"
   },
   {
     "id": "009",
     "name": "グランカブト",
-    "image": "images/009_グランカブト.jpg"
+    "image": "images/recolored/009_グランカブト.jpg"
   },
   {
     "id": "010",
     "name": "モチウサ",
-    "image": "images/010_モチウサ.jpg"
+    "image": "images/recolored/010_モチウサ.jpg"
   },
   {
     "id": "011",
     "name": "トケフクロ",
-    "image": "images/011_トケフクロ.jpg"
+    "image": "images/recolored/011_トケフクロ.jpg"
   },
   {
     "id": "012",
     "name": "クロノウル",
-    "image": "images/012_クロノウル.jpg"
+    "image": "images/recolored/012_クロノウル.jpg"
   },
   {
     "id": "013",
     "name": "カギネコ",
-    "image": "images/013_カギネコ.jpg"
+    "image": "images/recolored/013_カギネコ.jpg"
   },
   {
     "id": "014",
     "name": "ニャントム",
-    "image": "images/014_ニャントム.jpg"
+    "image": "images/recolored/014_ニャントム.jpg"
   },
   {
     "id": "015",
     "name": "ユキカメ",
-    "image": "images/015_ユキカメ.jpg"
+    "image": "images/recolored/015_ユキカメ.jpg"
   },
   {
     "id": "016",
     "name": "イチゴバチ",
-    "image": "images/016_イチゴバチ.jpg"
+    "image": "images/recolored/016_イチゴバチ.jpg"
   },
   {
     "id": "017",
     "name": "メンガ",
-    "image": "images/017_メンガ.jpg"
+    "image": "images/recolored/017_メンガ.jpg"
   },
   {
     "id": "018",
     "name": "マジエイ",
-    "image": "images/018_マジエイ.jpg"
+    "image": "images/recolored/018_マジエイ.jpg"
   },
   {
     "id": "019",
     "name": "キカンサイ",
-    "image": "images/019_キカンサイ.jpg"
+    "image": "images/recolored/019_キカンサイ.jpg"
   },
   {
     "id": "020",
     "name": "ゴウキサイ",
-    "image": "images/020_ゴウキサイ.jpg"
+    "image": "images/recolored/020_ゴウキサイ.jpg"
   },
   {
     "id": "021",
     "name": "ツボタコ",
-    "image": "images/021_ツボタコ.jpg"
+    "image": "images/recolored/021_ツボタコ.jpg"
   },
   {
     "id": "022",
     "name": "パレットン",
-    "image": "images/022_パレットン.jpg"
+    "image": "images/recolored/022_パレットン.jpg"
   },
   {
     "id": "023",
     "name": "ラッパタツ",
-    "image": "images/023_ラッパタツ.jpg"
+    "image": "images/recolored/023_ラッパタツ.jpg"
   },
   {
     "id": "024",
     "name": "フラミランプ",
-    "image": "images/024_フラミランプ_軽量版.jpg"
+    "image": "images/recolored/024_フラミランプ_軽量版.jpg"
   },
   {
     "id": "025",
     "name": "マグサソリ",
-    "image": "images/025_マグサソリ.jpg"
+    "image": "images/recolored/025_マグサソリ.jpg"
   },
   {
     "id": "026",
     "name": "タネモグラ",
-    "image": "images/026_タネモグラ.jpg"
+    "image": "images/recolored/026_タネモグラ.jpg"
   },
   {
     "id": "027",
     "name": "ダイコンモグ",
-    "image": "images/027_ダイコンモグ.jpg"
+    "image": "images/recolored/027_ダイコンモグ.jpg"
   },
   {
     "id": "028",
     "name": "アワロトル",
-    "image": "images/028_アワロトル.jpg"
+    "image": "images/recolored/028_アワロトル.jpg"
   },
   {
     "id": "029",
     "name": "アシザル",
-    "image": "images/029_アシザル.jpg"
+    "image": "images/recolored/029_アシザル.jpg"
   },
   {
     "id": "030",
     "name": "チンムシャ",
-    "image": "images/030_チンムシャ.jpg"
+    "image": "images/recolored/030_チンムシャ.jpg"
   },
   {
     "id": "031",
     "name": "ゴリカブト",
-    "image": "images/031_ゴリカブト.jpg"
+    "image": "images/recolored/031_ゴリカブト.jpg"
   },
   {
     "id": "SECRET01",
     "name": "テンセイリュウ",
-    "image": "images/SECRET01_テンセイリュウ.jpg"
+    "image": "images/recolored/SECRET01_テンセイリュウ.jpg"
   },
   {
     "id": "SECRET02",
     "name": "ジクロノス",
-    "image": "images/SECRET02_ジクロノス.jpg"
+    "image": "images/recolored/SECRET02_ジクロノス.jpg"
   }
 ].map(Object.freeze));
