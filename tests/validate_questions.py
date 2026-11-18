@@ -6,14 +6,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / "data/kanji_400_final.csv"
-EXPECTED_SHA256 = "d4b0be69f2f43415221ed42973bd6a747e5ba2a42eb221cc8aa75c0d16b05d73"
+# 承認済みの語彙修正（2b2b3e0）・音どく表記（997206a）を含む公開版を基準とする。
+EXPECTED_SHA256 = "2d8ea8324783d9c7f874dd75c9bd1f3a7e58770ede60e333d4d77b27a0699d10"
 KANJI = set("一二三四五六七八九十百千上下左右中大小月日年早木林山川土空田天生花草虫犬人名女男子目耳口手足見音力気円入出立休先夕本正文字学校村町森水火玉王石竹糸貝車金雨赤青白")
 HEADERS = ["番号", "対象漢字", "出題語彙", "正しい読み", "間違い①（候補）", "間違い②（候補）", "確認状況"]
 
 
 def validate():
     if hashlib.sha256(PATH.read_bytes()).hexdigest() != EXPECTED_SHA256:
-        raise ValueError("提供原本から変更されています。明示的な変更承認と履歴を確認してください。")
+        raise ValueError("承認済みCSVから変更されています。明示的な変更承認と履歴を確認してください。")
     with PATH.open(encoding="utf-8-sig", newline="") as source:
         reader = csv.DictReader(source)
         if reader.fieldnames != HEADERS:
@@ -32,7 +33,7 @@ def validate():
             raise ValueError(f"{row['番号']}: 選択肢が重複しています")
         if row["対象漢字"] not in row["出題語彙"]:
             raise ValueError(f"{row['番号']}: 出題語彙に対象漢字がありません")
-    print("PASS: 原本一致、400問、番号1〜400、80字×各5問、空欄なし、三択重複なし")
+    print("PASS: 承認済みCSV一致、400問、番号1〜400、80字×各5問、空欄なし、三択重複なし")
     print("確認状況:", dict(Counter(row["確認状況"] for row in rows)))
 
 

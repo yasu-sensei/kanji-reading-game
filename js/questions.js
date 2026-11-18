@@ -64,5 +64,43 @@
     return result;
   }
 
-  window.KanjiQuestions = Object.freeze({ kanji: Object.freeze(kanji), parseCSV, parseQuestions, shuffle });
+  // 日付やチェック操作順ではなく、CSV初出順で末尾の10字を重点範囲にする。
+  function focusKanji(selected, order = kanji) {
+    const checked = new Set(selected);
+    return order.filter(k => checked.has(k)).slice(-10);
+  }
+  function pickFocusedQuestions({questions, selected, order = kanji, history = {}, total, shuffleFn = shuffle}) {
+    const checked = new Set(selected), focus = new Set(focusKanji(selected, order));
+    const target = q => q.k ?? q.target;
+    const all = questions.filter(q => checked.has(target(q)));
+    if (!all.length) throw new Error("かんじを 1ついじょう えらんでね！");
+    const focused = all.filter(q => focus.has(target(q)));
+    const earlier = all.filter(q => !focus.has(target(q)));
+    const used = new Set(), appearances = new Map(), chosen = [];
+    const rank = q => { const h = history[q.id]; return !h?.seen ? 0 : h.wrong > 0 ? 1 : 2; };
+    const lastSeen = q => Number.isFinite(history[q.id]?.lastSeen) ? history[q.id].lastSeen : 0;
+    function take(pool, count, block) {
+      for (let n = 0; n < count; n++) {
+        const candidates = shuffleFn(pool.filter(q => !used.has(q.id)));
+        candidates.sort((a,b) => rank(a)-rank(b) || (appearances.get(target(a)) || 0)-(appearances.get(target(b)) || 0) || lastSeen(a)-lastSeen(b));
+        const q = candidates[0]; if (!q) break;
+        used.add(q.id); appearances.set(target(q), (appearances.get(target(q)) || 0)+1); block.push(q);
+      }
+    }
+    // ちょうせんの三択10問・入力10問の両方に重点5問ずつを確保する。
+    for (const size of total === 20 ? [10,10] : [total]) {
+      const block = [];
+      take(focused, Math.ceil(size / 2), block);
+      take(earlier, size - block.length, block);
+      while (block.length < size) {
+        const before = block.length;
+        take(all, size - block.length, block);
+        if (block.length === before) used.clear(); // 全候補を使い切った場合だけ重複を許可。
+      }
+      chosen.push(...shuffleFn(block));
+    }
+    return chosen;
+  }
+
+  window.KanjiQuestions = Object.freeze({ kanji: Object.freeze(kanji), parseCSV, parseQuestions, shuffle, focusKanji, pickFocusedQuestions });
 })();
