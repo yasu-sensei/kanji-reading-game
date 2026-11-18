@@ -79,14 +79,18 @@
     while (chosen.length < total) chosen.push(...shuffle(all).slice(0, total - chosen.length));
     return shuffle(chosen).map(q => ({ ...q, opts: shuffle([q.r, ...q.wrong]) }));
   }
-  const unlockedCards = u => Object.values(u.cardCounts || {}).reduce((sum, n) => sum + Math.min(3, Math.max(0, Number(n) || 0)), 0);
+  function isKanaQuestion() {
+    if (!game || !["play", "review"].includes(screen)) return false;
+    const q = screen === "review" ? review?.items[review.idx] : game.items[game.idx];
+    return !!q?.kanaMode;
+  }
   const kanaReading = value => String(value).normalize("NFKC").replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 96));
   const kanaColumns = ["あいうえお","かきくけこ","さしすせそ","たちつてと","なにぬねの","はひふへほ","まみむめも","やゆよ","らりるれろ","わをん"];
   const dakuten = {か:"が",き:"ぎ",く:"ぐ",け:"げ",こ:"ご",さ:"ざ",し:"じ",す:"ず",せ:"ぜ",そ:"ぞ",た:"だ",ち:"ぢ",つ:"づ",て:"で",と:"ど",は:"ば",ひ:"び",ふ:"ぶ",へ:"べ",ほ:"ぼ"};
   const handakuten = {は:"ぱ",ひ:"ぴ",ふ:"ぷ",へ:"ぺ",ほ:"ぽ"};
   const smallKana = {あ:"ぁ",い:"ぃ",う:"ぅ",え:"ぇ",お:"ぉ",や:"ゃ",ゆ:"ゅ",よ:"ょ",つ:"っ",わ:"ゎ"};
   function kanaKey(key) {
-    if (!game?.kanaMode || feedback || saving || !["play","review"].includes(screen)) return;
+    if (!isKanaQuestion() || feedback || saving || !["play","review"].includes(screen)) return;
     if (key === "delete") kanaInput = kanaInput.slice(0,-1);
     else if (key === "clear") kanaInput = "";
     else if (["dakuten","handakuten","small"].includes(key)) {
@@ -108,7 +112,7 @@
     return `<div class="kana-keyboard" aria-label="50おんキーボード"><div class="kana-side kana-side-left">${b("゛<small>てんてん</small>","kanaKey('dakuten')","kana-key")}${b("゜<small>まる</small>","kanaKey('handakuten')","kana-key")}${b("ちいさく","kanaKey('small')","kana-key")}${b("ー","kanaKey('ー')","kana-key")}</div><div class="kana-columns">${columns}</div><div class="kana-side kana-side-right">${b("1もじ けす","kanaKey('delete')","kana-key")}${b("ぜんぶ けす","kanaKey('clear')","kana-key")}<button type="button" id="kana-submit" class="kana-key primary" onclick="kanaSubmit()" ${!kanaInput || feedback || saving ? "disabled" : ""}>こたえを きめる</button></div></div>`;
   }
   async function kanaSubmit() {
-    if (!kanaInput || feedback || saving || !game?.kanaMode) return;
+    if (!kanaInput || feedback || saving || !isKanaQuestion()) return;
     const q = screen === "review" ? review?.items[review.idx] : screen === "play" ? game.items[game.idx] : null;
     if (!q) return;
     const ok = kanaInput === kanaReading(q.r);
@@ -123,7 +127,8 @@
     if (mode !== "teacherTest" && !available().length) { warning = "かんじを 1ついじょう えらんでね！"; render(); return; }
     if (mode === "homework" && user().lastHomework === today()) { warning = "きょうの ちょうせんは おわっているよ！"; render(); return; }
     if (mode === "practice" && practiceToday(user()) >= 5) { warning = "きょうの しゅぎょうは おわったよ。また あした！"; render(); return; }
-    warning = ""; kanaInput = ""; game = { id: crypto.randomUUID(), profile: data.active, mode, kanaMode: mode === "teacherTest" || mode === "homework" && unlockedCards(user()) >= 50, items: mode === "teacherTest" ? shuffle(QUESTIONS).slice(0, 20).map(q => ({ ...q, opts: shuffle([q.r, ...q.wrong]) })) : poolQuestions(mode === "homework" ? 20 : 10), idx: 0, answers: [], committed: false, awarded: 0, reviewFinished: false };
+    warning = ""; kanaInput = ""; game = { id: crypto.randomUUID(), profile: data.active, mode, items: mode === "teacherTest" ? shuffle(QUESTIONS).slice(0, 20).map(q => ({ ...q, opts: shuffle([q.r, ...q.wrong]) })) : poolQuestions(mode === "homework" ? 20 : 10), idx: 0, answers: [], committed: false, awarded: 0, reviewFinished: false };
+    game.items = game.items.map((q, index) => ({ ...q, kanaMode: mode === "teacherTest" || mode === "homework" && index >= 10 }));
     review = feedback = null; screen = "play"; render();
   }
   async function commitGame() {
@@ -148,7 +153,7 @@
     return ok;
   }
   async function answer(index) {
-    if (feedback || !game || screen !== "play") return;
+    if (feedback || !game || screen !== "play" || isKanaQuestion()) return;
     const current = game;
     const q = current.items[current.idx];
     if (!Number.isInteger(index) || !q.opts[index]) return;
@@ -162,7 +167,7 @@
     render(); // 正誤はタップした処理内ですぐ表示。
     if (current.answers.length === current.items.length) { await commitGame(); if (game !== current) return; render(); }
     cancelTimer();
-    timer = setTimeout(() => { if (screen !== "play" || game !== current) return; feedback = null; kanaInput = ""; game.idx++; if (game.idx >= game.items.length) screen = "result"; render(); }, ok ? (current.kanaMode ? 1000 : 1500) : 2000);
+    timer = setTimeout(() => { if (screen !== "play" || game !== current) return; feedback = null; kanaInput = ""; game.idx++; if (game.idx >= game.items.length) screen = "result"; render(); }, ok ? (isKanaQuestion() ? 1000 : 1500) : 2000);
   }
   async function retryCommit() { if (await commitGame()) warning = ""; render(); }
   async function quit() {
@@ -194,7 +199,7 @@
     kanaInput = ""; feedback = null; screen = "review"; render();
   }
   function reviewAnswer(index) {
-    if (feedback || screen !== "review") return;
+    if (feedback || screen !== "review" || isKanaQuestion()) return;
     const q = review.items[review.idx], ok = q.opts[index] === q.r;
     reviewRecord(ok, index);
   }
@@ -210,7 +215,7 @@
         else { game.reviewFinished = true; screen = "reviewDone"; }
       }
       render();
-    }, ok ? (game?.kanaMode ? 1000 : 1500) : 2000);
+    }, ok ? (isKanaQuestion() ? 1000 : 1500) : 2000);
   }
   function nav(to) { cancelTimer(); feedback = review = null; if (to !== "result") game = null; screen = to; warning = ""; render(); }
   function goRewards(page) { cancelTimer(); location.href = page + ".html"; }
@@ -234,12 +239,12 @@
     const u = user();
     html += `<div class="row user-header"><span class="badge">${esc(data.active.replace("-", "くみ "))}ばん</span><span class="badge" id="learning-stars"><span class="gold-star" aria-hidden="true">★</span> きん☆ ${u.stars}こ</span><span class="badge" id="white-stars"><span class="white-star" aria-hidden="true">★</span> しろ☆ ${u.practice}こ</span>${b("とうろく きりかえ", "changeUser()", "small secondary")}</div>`;
     if (screen === "home") screen = "select";
-    if (screen === "select") html += `<section class="card"><h2>① ならった かんじを えらぼう！</h2><p class="muted">タッチで えらぶ・もういちどで はずす</p><div class="row"><span class="badge">${u.selected.length} / 80じ</span><div class="buttons">${b("ぜんぶ えらぶ", "selectAll(true)", "small secondary")}${b("ぜんぶ はずす", "selectAll(false)", "small secondary")}</div></div><div class="grid">${KANJI.map(k => `<button type="button" class="kanji ${u.selected.includes(k) ? "on" : ""}" aria-label="${k}" aria-pressed="${u.selected.includes(k)}" onclick="toggle('${k}')" ${saving ? "disabled" : ""}>${k}</button>`).join("")}</div><p class="muted">えらんだ かんじの ことば：${available().length}もん</p></section><section class="card stack"><h2>② モードを えらぼう！</h2><p class="reward-rule" id="kana-unlock-status">📖 ずかんの カード：${unlockedCards(u)} / 50まい　｜　${unlockedCards(u) >= 50 ? "⌨️ 50おんキーボード かいほう！" : "あと " + (50 - unlockedCards(u)) + "まいで 50おんキーボード"}</p><p>🏠 ちょうせんモード：1にち 1かい（20もん）</p><p class="reward-rule">20もん ぜんぶ せいかいで きん☆ 2こ！<br>10〜19もん せいかいで きん☆ 1こ。</p><button type="button" class="primary full" onclick="begin('homework')" ${u.lastHomework === today() || saving ? "disabled" : ""}>${u.lastHomework === today() ? "✓ きょうの ちょうせんは おわったよ" : "ちょうせんを はじめる"}</button><p>✏️ しゅぎょうモード：1にち 5かいまで（1かい 10もん・とちゅうで やめても 1かい）（きょう あと ${Math.max(0, 5 - practiceToday(u))}かい）</p><p class="reward-rule">10もんの うち はじめの こたえで 9もん いじょう せいかいすると しろ☆ 1こ！<br>8もん いかでも、とちゅうで やめても 1にち 5かいの うち 1かいに かぞえるよ。<br>しろ☆ 5こで きん☆ 1こに なるよ。</p><p>いま しろ☆ ${u.practice}こ。あと ${5 - u.practice}こで きん☆ 1こ！</p><button type="button" class="full secondary" onclick="begin('practice')" ${practiceToday(u) >= 5 || saving ? "disabled" : ""}>${practiceToday(u) >= 5 ? "✓ きょうの しゅぎょうは おわったよ" : "しゅぎょうを はじめる"}</button><p>📚 むげんれんしゅうモード：1セット 10もん</p><p class="reward-rule">1にち なんかいでも できるよ。<br>きん☆・しろ☆は もらえないよ。</p>${b("むげんれんしゅうを はじめる", "begin('free')", "full secondary")}${teacherTestAccess ? `<div class="teacher-test-panel"><h3>先生用 50音入力テスト</h3><p>カード0枚でも確認できます。星・カード・学習履歴は変更しません。テストは20問です。</p>${b("50音入力をテストする", "begin('teacherTest')", "primary full")}</div>` : ""}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')", "full")}${b("📖 ずかん", "goRewards('collection')", "full")}</div></section>`;
+    if (screen === "select") html += `<section class="card"><h2>① ならった かんじを えらぼう！</h2><p class="muted">タッチで えらぶ・もういちどで はずす</p><div class="row"><span class="badge">${u.selected.length} / 80じ</span><div class="buttons">${b("ぜんぶ えらぶ", "selectAll(true)", "small secondary")}${b("ぜんぶ はずす", "selectAll(false)", "small secondary")}</div></div><div class="grid">${KANJI.map(k => `<button type="button" class="kanji ${u.selected.includes(k) ? "on" : ""}" aria-label="${k}" aria-pressed="${u.selected.includes(k)}" onclick="toggle('${k}')" ${saving ? "disabled" : ""}>${k}</button>`).join("")}</div><p class="muted">えらんだ かんじの ことば：${available().length}もん</p></section><section class="card stack"><h2>② モードを えらぼう！</h2><p>🏠 ちょうせんモード：1にち 1かい（20もん）</p><p class="reward-rule" id="challenge-input-guide">はじめの 10もんは 3たく。<br>あとの 10もんは 50おんキーボードで よみかたを いれよう！</p><p class="reward-rule">20もん ぜんぶ せいかいで きん☆ 2こ！<br>10〜19もん せいかいで きん☆ 1こ。</p><button type="button" class="primary full" onclick="begin('homework')" ${u.lastHomework === today() || saving ? "disabled" : ""}>${u.lastHomework === today() ? "✓ きょうの ちょうせんは おわったよ" : "ちょうせんを はじめる"}</button><p>✏️ しゅぎょうモード：1にち 5かいまで（1かい 10もん・とちゅうで やめても 1かい）（きょう あと ${Math.max(0, 5 - practiceToday(u))}かい）</p><p class="reward-rule">10もんの うち はじめの こたえで 9もん いじょう せいかいすると しろ☆ 1こ！<br>8もん いかでも、とちゅうで やめても 1にち 5かいの うち 1かいに かぞえるよ。<br>しろ☆ 5こで きん☆ 1こに なるよ。</p><p>いま しろ☆ ${u.practice}こ。あと ${5 - u.practice}こで きん☆ 1こ！</p><button type="button" class="full secondary" onclick="begin('practice')" ${practiceToday(u) >= 5 || saving ? "disabled" : ""}>${practiceToday(u) >= 5 ? "✓ きょうの しゅぎょうは おわったよ" : "しゅぎょうを はじめる"}</button><p>📚 むげんれんしゅうモード：1セット 10もん</p><p class="reward-rule">1にち なんかいでも できるよ。<br>きん☆・しろ☆は もらえないよ。</p>${b("むげんれんしゅうを はじめる", "begin('free')", "full secondary")}${teacherTestAccess ? `<div class="teacher-test-panel"><h3>先生用 50音入力テスト</h3><p>カード0枚でも確認できます。星・カード・学習履歴は変更しません。テストは20問です。</p>${b("50音入力をテストする", "begin('teacherTest')", "primary full")}</div>` : ""}<div class="result-links">${b("🎁 ガチャ", "goRewards('gacha')", "full")}${b("📖 ずかん", "goRewards('collection')", "full")}</div></section>`;
     if (screen === "play" || screen === "review") {
       const isReview = screen === "review", q = isReview ? review.items[review.idx] : game.items[game.idx];
       const num = isReview ? review.idx + 1 : game.idx + 1, max = isReview ? review.items.length : game.items.length;
-      const typing = !!game?.kanaMode;
-      const kanaStatus = game.mode === "homework" ? `<span class="kana-mode-status">カード ${unlockedCards(u)}まい・${typing ? "50おん" : "3たく"}</span>` : "";
+      const typing = isKanaQuestion();
+      const kanaStatus = game.mode === "homework" ? `<span class="kana-mode-status">${typing ? "⌨️ 11〜20もん：50おんキーボード" : "1〜10もん：3たく"}</span>` : "";
       html += `<section class="card play-card ${typing ? "kana-play" : ""}" data-question-id="${q.id}"><div class="question-toolbar"><strong>${isReview ? "ふくしゅう " + review.round + "かいめ" : game.mode === "homework" ? "ちょうせん" : game.mode === "teacherTest" ? "せんせい テスト" : game.mode === "practice" ? "しゅぎょう" : "むげんれんしゅう"} ${num} / ${max}</strong>${kanaStatus}${b("やめる", isReview ? "nav('result')" : "quit()", "small secondary")}</div><div class="progress" role="progressbar" aria-label="こたえた もんだい" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${num - 1}"><div style="width:${(num - 1) / max * 100}%"></div></div><div class="answer-display"><div class="feedback ${feedback ? feedback.ok ? "good" : "bad" : ""}" role="status" aria-live="polite">${feedback ? feedback.ok ? "○ せいかい！" : "× たしかめよう" : ""}</div><div class="question remember-word">${typing ? esc(q.w) : questionWord(q)}</div><div class="reading-slot"><div class="remember-reading" ${feedback ? "" : 'style="visibility:hidden" aria-hidden="true"'}>${esc(q.r)}</div>${feedback ? "" : `<p class="muted reading-prompt">${typing ? "つぎの かん字の よみかたを いれよう" : "ただしい よみかたを えらぼう！"}</p>`}</div></div><div class="choices">${typing ? `<div class="kana-answer-row"><div id="kana-answer" class="kana-answer ${kanaInput ? "" : "empty"}">${esc(kanaInput || "よみかたを いれてね")}</div></div>${kanaKeyboard()}` : q.opts.map((option, i) => `<button type="button" ${feedback ? "disabled" : ""} class="choice ${feedback ? option === q.r ? "correct" : i === feedback.choice ? "wrong" : "" : ""}" onclick="${isReview ? "reviewAnswer" : "answer"}(${i})">${esc(option)}</button>`).join("")}</div></section>`;
     }
     if (screen === "result") {
