@@ -17,7 +17,8 @@ def build(output, embed_images=True):
     source = (ROOT / "js/cards.js").read_text()
     cards = json.loads(source.split("Object.freeze(", 1)[1].rsplit(".map(Object.freeze)", 1)[0])
     for card in cards:
-        card["image"] = ("data:image/jpeg;base64," + base64.b64encode((ROOT / card["image"]).read_bytes()).decode()) if embed_images else "https://yasu-sensei.github.io/kanji-reading-game/" + card["image"]
+        for field in ["image", "variantImage"]:
+            card[field] = ("data:image/jpeg;base64," + base64.b64encode((ROOT / card[field]).read_bytes()).decode()) if embed_images else "https://yasu-sensei.github.io/kanji-reading-game/" + card[field]
     screens = {}
     styles = {}
     for screen, filename, css in [("game", "index.html", "app.css"), ("gacha", "gacha.html", "rewards.css"), ("collection", "collection.html", "rewards.css")]:

@@ -11,7 +11,7 @@ const base = 'http://127.0.0.1:8000';
 (async () => {
   assert.equal(cards.length, 33);
   assert.equal(new Set(cards.map(c => c.id)).size, 33);
-  for (const card of cards) assert(fs.existsSync(card.image));
+  for (const card of cards) { assert(fs.existsSync(card.image)); assert(fs.existsSync(card.variantImage)); }
   const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
   try {
     const context = await browser.newContext({ reducedMotion: 'reduce' });
@@ -38,19 +38,28 @@ const base = 'http://127.0.0.1:8000';
     }
     assert(await draw.isDisabled()); // No stars, no extra draw.
     await page.locator('#add-demo-stars').click();
-    // Rapid repeat calls must yield a single draw, and never give card 001 a fourth copy.
+    // Legacy 3-copy record upgrades to the fourth variant once, even under rapid clicks.
     await draw.evaluate(el => { el.click(); el.click(); el.click(); });
     await page.waitForFunction(() => !document.querySelector('.summon-panel').classList.contains('is-drawing'));
     const state = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), key);
-    assert.deepEqual(state.counts, { '001': 3, '002': 1 });
+    assert.deepEqual(state.counts, { '001': 4 });
     assert.equal(state.stars, 2);
     await page.reload();
     assert.equal(await page.locator('#star-count').textContent(), '2');
     await page.goto(`${base}/collection.html?demo=1`);
-    assert.equal(await page.locator('.album-entry').count(), 99);
+    assert.equal(await page.locator('.album-entry').count(), 132);
     assert.equal(await page.locator('#collection-count').textContent(), '4');
-    assert.equal(await page.locator('[data-card-id="001"] .album-card-button:enabled').count(), 3);
-    assert.equal(await page.locator('[data-card-id="002"] .album-card-button:enabled').count(), 1);
+    assert.equal(await page.locator('[data-card-id="001"] .album-card-button:enabled').count(), 4);
+    assert.equal(await page.locator('[data-card-id="002"] .album-card-button:enabled').count(), 0);
+    await page.locator('[data-filter="variant"]').click();
+    assert.equal(await page.locator('.album-entry').count(), 33);
+    const variant = page.locator('[data-card-id="001"] .card-art.variant img');
+    assert.match(await variant.getAttribute('src'), /images\/variants\//);
+    await variant.evaluate(img => img.decode());
+    await page.locator('[data-card-id="001"] button').click();
+    assert.match(await page.locator('#detail-name').textContent(), /蛍森亜種/);
+    await page.keyboard.press('Escape');
+    await page.locator('[data-filter="all"]').click();
     const rainbow = page.locator('[data-card-id="001"][data-tier="rainbow"] button');
     await rainbow.focus();
     await page.keyboard.press('Enter');
@@ -71,8 +80,8 @@ const base = 'http://127.0.0.1:8000';
     await page.waitForFunction(() => document.querySelector('#collection-count').textContent === '5');
     await second.close();
     // Only one missing variant: it must be drawn, then the complete collection stops spending stars.
-    const completeCounts = Object.fromEntries(cards.map(c => [c.id, 3]));
-    completeCounts.SECRET02 = 2;
+    const completeCounts = Object.fromEntries(cards.map(c => [c.id, 4]));
+    completeCounts.SECRET02 = 3;
     await page.evaluate(({ key, counts }) => localStorage.setItem(key, JSON.stringify({ version: 1, stars: 2, counts })), { key, counts: completeCounts });
     await page.goto(`${base}/gacha.html?demo=1`);
     await draw.click();
@@ -82,8 +91,8 @@ const base = 'http://127.0.0.1:8000';
     assert(await page.locator('#add-demo-stars').isDisabled());
     await page.goto(`${base}/collection.html?demo=1`);
     await page.locator('#owned-only').uncheck();
-    assert.equal(await page.locator('#collection-count').textContent(), '99');
-    assert.equal(await page.locator('.album-card-button:enabled').count(), 99);
+    assert.equal(await page.locator('#collection-count').textContent(), '132');
+    assert.equal(await page.locator('.album-card-button:enabled').count(), 132);
     await page.setViewportSize({ width: 320, height: 740 });
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     // All images decode, including filenames with Japanese characters and the non-square secret card.
@@ -96,7 +105,7 @@ const base = 'http://127.0.0.1:8000';
     await page.setViewportSize({ width: 1280, height: 1000 });
     await page.screenshot({ path: '/tmp/kanji-gacha-desktop.png', fullPage: true });
     // Corrupt/invalid saved records are preserved, and draws stop until an explicit reset.
-    for (const raw of ['{broken', JSON.stringify({ version: 1, stars: -1, counts: {} }), JSON.stringify({ version: 1, stars: 3, counts: { '001': 4 } })]) {
+    for (const raw of ['{broken', JSON.stringify({ version: 1, stars: -1, counts: {} }), JSON.stringify({ version: 1, stars: 3, counts: { '001': 5 } })]) {
       await page.evaluate(({ key, raw }) => localStorage.setItem(key, raw), { key, raw });
       await page.reload();
       assert(await draw.isDisabled());
@@ -122,8 +131,8 @@ const base = 'http://127.0.0.1:8000';
     await deniedPage.goto(`${base}/gacha.html?demo=1`);
     assert(await deniedPage.locator('#draw-card').isDisabled());
     await deniedPage.goto(`${base}/collection.html?demo=1`);
-    assert.equal(await deniedPage.locator('.album-entry').count(), 99);
+    assert.equal(await deniedPage.locator('.album-entry').count(), 132);
     assert.deepEqual(errors, []);
-    console.log('PASS: 33 assets, all 3 foil tiers, persistent 99 slots, filters/dialog/keyboard, 3-copy exclusion, complete stop, rapid clicks, star limits, multi-tab refresh, storage failures, reset isolation, reduced motion, 320px layout and image decode');
+    console.log('PASS: 33 assets, all 4 tiers, persistent 132 slots, filters/dialog/keyboard, 4-copy exclusion, complete stop, rapid clicks, star limits, multi-tab refresh, storage failures, reset isolation, reduced motion, 320px layout and image decode');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exit(1); });

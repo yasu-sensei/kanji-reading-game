@@ -10,7 +10,7 @@
     for (const [id, u] of Object.entries(result.users)) {
       if (!profilePattern.test(id) || !u || !Number.isSafeInteger(u.stars) || u.stars < 0 || !Number.isInteger(u.practice) || u.practice < 0 || u.practice > 4 || !Array.isArray(u.selected) || !Array.isArray(u.log) || !u.history || typeof u.history !== "object" || Array.isArray(u.history)) throw new Error("ほぞんデータの かたちが ちがいます。おとなの方に しらせてね。");
       u.cardCounts ??= {};
-      if (typeof u.cardCounts !== "object" || Array.isArray(u.cardCounts) || Object.entries(u.cardCounts).some(([card, count]) => !cardIds.has(card) || !Number.isInteger(count) || count < 0 || count > 3)) throw new Error("カードの きろくを よみこめません。");
+      if (typeof u.cardCounts !== "object" || Array.isArray(u.cardCounts) || Object.entries(u.cardCounts).some(([card, count]) => !cardIds.has(card) || !Number.isInteger(count) || count < 0 || count > 4)) throw new Error("カードの きろくを よみこめません。");
     }
     result.active ??= "";
     if (result.active && (!profilePattern.test(result.active) || !Object.hasOwn(result.users, result.active))) throw new Error("とうろくを たしかめてね。");
