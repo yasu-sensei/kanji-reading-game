@@ -230,7 +230,7 @@
   function render() {
     document.body.classList.toggle("title-mode", !loginVisible);
     if (!loginVisible) {
-      app.innerHTML = `<section class="title-screen" aria-labelledby="fantasia-title"><div class="title-art"><img src="images/login-fantasia-library.jpg" alt="太陽と月の魔法図書館。星空に本や城が浮かび、光の階段が続いている" fetchpriority="high"><div class="title-content"><h1 id="fantasia-title"><span class="title-kanji">かん字</span><span class="title-fantasia">ファンタジア</span></h1><button type="button" class="title-start" onclick="showLogin()">ゲームをはじめる <span aria-hidden="true">✦</span></button></div></div></section>`;
+      app.innerHTML = `<section class="title-screen" aria-labelledby="fantasia-title"><div class="title-art"><img src="images/login-fantasia-logo.jpg" alt="太陽と月の魔法図書館。星空に本や城が浮かび、光の階段が続いている" fetchpriority="high"><div class="title-content"><h1 id="fantasia-title" class="visually-hidden">かん字ファンタジア</h1><button type="button" class="title-start" onclick="showLogin()">ゲームをはじめる <span aria-hidden="true">✦</span></button></div></div></section>`;
       return;
     }
     let html = `<h1>🌸 かん字ファンタジア</h1>`;
