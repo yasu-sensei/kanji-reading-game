@@ -6,6 +6,7 @@
     { id: "normal", name: "ノーマル", required: 1 },
     { id: "gold", name: "ゴールド", required: 2 },
     { id: "rainbow", name: "レインボー", required: 3 },
+    { id: "variant", name: "亜種（あしゅ）", required: 4 },
   ];
   const integrated = !new URLSearchParams(location.search).has("demo");
   const storageKey = integrated ? window.GameStore.key : "kanji-reading-game:rewards-demo:v1";
@@ -37,7 +38,7 @@
       throw new Error("Invalid reward state");
     }
     for (const [id, count] of Object.entries(value.counts)) {
-      if (!cards.some((card) => card.id === id) || !Number.isInteger(count) || count < 0 || count > 3) throw new Error("Invalid card count");
+      if (!cards.some((card) => card.id === id) || !Number.isInteger(count) || count < 0 || count > tiers.length) throw new Error("Invalid card count");
     }
     return { version: 1, stars: value.stars, counts: { ...value.counts } };
   }
@@ -86,7 +87,7 @@
     const frame = document.createElement("div");
     frame.className = `card-art ${tier.id}`;
     const image = document.createElement("img");
-    image.src = card.image;
+    image.src = tier.id === "variant" ? card.variantImage : card.image;
     image.alt = `${card.name}の${tier.name}カード`;
     image.loading = lazy ? "lazy" : "eager";
     image.decoding = "async";
@@ -97,7 +98,7 @@
       frame.append(message);
     }, { once: true });
     frame.append(image);
-    if (tier.id !== "normal") {
+    if (tier.id === "gold" || tier.id === "rainbow") {
       const sparkles = document.createElement("span");
       sparkles.className = "foil-sparkles";
       sparkles.setAttribute("aria-hidden", "true");
@@ -112,7 +113,7 @@
   }
 
   function renderGacha() {
-    const complete = unlockedCount() === cards.length * 3;
+    const complete = unlockedCount() === cards.length * tiers.length;
     document.getElementById("star-count").textContent = state.stars;
     const draw = document.getElementById("draw-card");
     draw.disabled = !storageOK || busy || complete || state.stars === 0;
@@ -122,18 +123,18 @@
     add.hidden = integrated;
     add.disabled = integrated || !storageOK || busy || complete || state.stars > 996;
     const message = document.getElementById("draw-message");
-    if (complete) message.textContent = "コンプリート！ 99まいの たからものが そろったよ。";
-    else if (state.stars === 0) message.textContent = integrated ? "しゅくだいや れんしゅうで 星を あつめよう！" : "おためしの星を ふやすと、また ひけるよ。";
-    else if (!busy) message.textContent = "星1こで 1かい。3まい あつめた なかまは もうでないよ。";
+    if (complete) message.textContent = "コンプリート！ 132まいの たからものが そろったよ。";
+    else if (state.stars === 0) message.textContent = integrated ? "ちょうせんや しゅぎょうで 星を あつめよう！" : "おためしの星を ふやすと、また ひけるよ。";
+    else if (!busy) message.textContent = "星1こで 1かい。4まい あつめた なかまは もうでないよ。";
   }
 
   function showResult(card, count) {
     const tier = tiers[count - 1];
-    document.getElementById("result-heading").textContent = count === 1 ? "なかまが ふえたよ！" : "カードが かがやいたよ！";
+    document.getElementById("result-heading").textContent = count === 4 ? "あしゅに であえたよ！" : count === 1 ? "なかまが ふえたよ！" : "カードが かがやいたよ！";
     const result = document.getElementById("draw-result");
     result.replaceChildren(makeArt(card, tier));
     const title = document.createElement("h3");
-    title.textContent = card.name;
+    title.textContent = tier.id === "variant" ? `${card.name}・${card.variantName}` : card.name;
     const meta = document.createElement("p");
     meta.className = "result-meta";
     meta.textContent = `${count}まいめ · ${tier.name}カード`;
@@ -144,7 +145,7 @@
   async function drawCard() {
     if (busy) return;
     refreshState();
-    const eligible = cards.filter((card) => countFor(card) < 3);
+    const eligible = cards.filter((card) => countFor(card) < tiers.length);
     if (!storageOK || state.stars === 0 || eligible.length === 0) {
       renderGacha();
       return;
@@ -199,7 +200,7 @@
   function openDetail(card, tier, button) {
     lastFocus = button;
     document.getElementById("detail-card").replaceChildren(makeArt(card, tier));
-    document.getElementById("detail-name").textContent = card.name;
+    document.getElementById("detail-name").textContent = tier.id === "variant" ? `${card.name}・${card.variantName}` : card.name;
     document.getElementById("detail-tier").textContent = `No.${card.id} · ${tier.name}`;
     document.getElementById("detail-count").textContent = `この なかまは ${countFor(card)}まい もっているよ。`;
     document.getElementById("card-dialog").showModal();
@@ -280,7 +281,7 @@
     document.getElementById("add-demo-stars").addEventListener("click", async () => {
       if (integrated || busy) return;
       refreshState();
-      if (storageOK && state.stars <= 996 && unlockedCount() < 99) await saveState({ ...state, stars: state.stars + 3 });
+      if (storageOK && state.stars <= 996 && unlockedCount() < cards.length * tiers.length) await saveState({ ...state, stars: state.stars + 3 });
       renderGacha();
     });
   } else {
